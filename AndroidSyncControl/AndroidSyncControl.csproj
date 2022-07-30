@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net462</TargetFramework>
+		<LangVersion>10.0</LangVersion>
+		<UseWPF>true</UseWPF>
+		<Platforms>x64</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
+	  <PackageReference Include="TqkLibrary.AdbDotNet" Version="1.0.0-build2022070800" />
+	  <PackageReference Include="TqkLibrary.Scrcpy" Version="1.0.0" />
+	  <PackageReference Include="TqkLibrary.Scrcpy.Wpf" Version="1.0.0" />
+	  <PackageReference Include="TqkLibrary.WpfUi" Version="1.0.0-build2022050602" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="AppData\Adb\adb.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="AppData\Adb\AdbWinApi.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="AppData\Adb\AdbWinUsbApi.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>
