@@ -17,13 +17,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="AppData\Adb\adb.exe">
+	  <None Update="adb.exe">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="AppData\Adb\AdbWinApi.dll">
+	  <None Update="AdbWinApi.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="AppData\Adb\AdbWinUsbApi.dll">
+	  <None Update="AdbWinUsbApi.dll">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

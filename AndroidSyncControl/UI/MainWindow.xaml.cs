@@ -28,10 +28,6 @@ namespace AndroidSyncControl.UI
         readonly Timer timer;
         public MainWindow()
         {
-            string path = Environment.GetEnvironmentVariable("PATH");
-            path += $";{Singleton.AdbDir}";
-            Environment.SetEnvironmentVariable("PATH", path);
-
             InitializeComponent();
             this.mainWVM = this.DataContext as MainWVM;
             this.Loaded += MainWindow_Loaded;
