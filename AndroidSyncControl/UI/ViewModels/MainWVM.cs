@@ -23,6 +23,11 @@ namespace AndroidSyncControl.UI.ViewModels
             get { return Singleton.Setting.Setting.ViewPercent; }
             set { Singleton.Setting.Setting.ViewPercent = value; NotifyPropertyChange(); Singleton.Setting.Save(); }
         }
+        public int MaxFps
+        {
+            get { return Singleton.Setting.Setting.MaxFps; }
+            set { Singleton.Setting.Setting.MaxFps = value; NotifyPropertyChange(); Singleton.Setting.Save(); }
+        }
 
         public ObservableCollection<DeviceView> DeviceViews { get; } = new ObservableCollection<DeviceView>();
 

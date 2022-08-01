@@ -170,7 +170,7 @@ namespace AndroidSyncControl.UI.ViewModels
                     ClipboardAutosync = false,
                     HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
                     IsUseD3D11Shader = true,
-                    MaxFps = 24,
+                    MaxFps = Singleton.Setting.Setting.MaxFps,
                     IsControl = true,
                     PowerOn = true,
                     StayAwake = true,

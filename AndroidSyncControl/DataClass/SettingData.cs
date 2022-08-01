@@ -9,5 +9,6 @@ namespace AndroidSyncControl.DataClass
     internal class SettingData
     {
         public double ViewPercent { get; set; } = 30;
+        public int MaxFps { get; set; } = 24;
     }
 }

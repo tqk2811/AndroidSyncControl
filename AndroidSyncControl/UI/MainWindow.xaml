@@ -9,6 +9,7 @@
         xmlns:ViewModels="clr-namespace:AndroidSyncControl.UI.ViewModels"
         xmlns:st="http://schemas.spicytaco.io/"
         xmlns:Wpfui="clr-namespace:TqkLibrary.WpfUi.UserControls;assembly=TqkLibrary.WpfUi"
+        xmlns:Xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Android Sync Control" Height="450" Width="800" >
     <Window.DataContext>
@@ -33,6 +34,8 @@
             <Button Width="90" Content="Show ListView" x:Name="btn_showListView" Click="btn_showListView_Click"/>
             <Slider x:Name="slider" Maximum="100" Minimum="1" Value="{Binding ViewPercent}" Width="200" ValueChanged="slider_ValueChanged" 
                     ToolTip="{Binding ViewPercent}"/>
+            <TextBlock Text="MaxFps:" VerticalAlignment="Center"/>
+            <Xceed:IntegerUpDown Width="40" Minimum="0" Maximum="120" Value="{Binding MaxFps}" Increment="1" VerticalAlignment="Center"/>
         </StackPanel>
 
         <st:StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5" x:Name="stackPanel" SizeChanged="stackPanel_SizeChanged">
