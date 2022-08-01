@@ -8,6 +8,7 @@ using TqkLibrary.Scrcpy;
 using TqkLibrary.Scrcpy.Wpf;
 using TqkLibrary.AdbDotNet;
 using System.Threading;
+using System.Diagnostics;
 
 namespace AndroidSyncControl.UI.ViewModels
 {
@@ -118,29 +119,52 @@ namespace AndroidSyncControl.UI.ViewModels
 
         private async void Scrcpy_OnDisconnect()
         {
-            if (!isStop)
+            try
             {
-                try
+                while (!isStop)
                 {
                     await adb.WaitFor(WaitForType.Device).ExecuteAsync(cancellationTokenSource.Token, true);
-                    if (!isStop) _ = Start();
+#if DEBUG
+                    Debug.WriteLine("adb wait-for-device success");
+#endif
+                    while (true)
+                    {
+                        var r = await adb.Shell.BuildShellCommand("getprop init.svc.bootanim").ExecuteAsync(cancellationTokenSource.Token, true);
+                        string stdout = r.Stdout();
+#if DEBUG
+                        Debug.WriteLine($"getprop init.svc.bootanim: {stdout}");
+#endif
+                        if (stdout.StartsWith("stopped")) break;
+                        else await Task.Delay(200, cancellationTokenSource.Token);
+                    }
+                    if (await Start())
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        await Task.Delay(1000, cancellationTokenSource.Token);
+                    }
                 }
-                catch (OperationCanceledException)
-                {
-                    return;
-                }
-                catch (Exception ex)
-                {
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+            catch (Exception ex)
+            {
 
-                }
             }
         }
 
 
-        public Task Start()
+        public Task<bool> Start()
         {
             return Task.Run(() =>
             {
+#if DEBUG
+                Debug.WriteLine($"scrcpy.Connect");
+#endif
                 if (scrcpy.Connect(new ScrcpyConfig()
                 {
                     ClipboardAutosync = false,
@@ -156,10 +180,11 @@ namespace AndroidSyncControl.UI.ViewModels
                 }))
                 {
                     isStop = false;
+                    return true;
                 }
                 else
                 {
-
+                    return false;
                 }
             });
         }

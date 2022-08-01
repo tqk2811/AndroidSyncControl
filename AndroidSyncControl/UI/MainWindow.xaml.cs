@@ -134,10 +134,20 @@ namespace AndroidSyncControl.UI
                 if (mainWVM.DeviceNameListSelected != null)
                 {
                     string deviceid = mainWVM.DeviceNameListSelected.Name;
+#if DEBUG
+                    for (int i = 0; i < 3; i++)
+                    {
+                        DeviceView deviceView = new DeviceView(deviceid);
+                        mainWVM.DeviceViews.Add(deviceView);
+                        await deviceView.Start();
+                        deviceView.SliderChange(mainWVM.ViewPercent);
+                    }
+#else
                     DeviceView deviceView = new DeviceView(deviceid);
                     mainWVM.DeviceViews.Add(deviceView);
                     await deviceView.Start();
                     deviceView.SliderChange(mainWVM.ViewPercent);
+#endif
                 }
             }
             catch

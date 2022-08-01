@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AndroidSyncControl": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

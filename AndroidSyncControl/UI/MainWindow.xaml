@@ -46,8 +46,6 @@
                     <Button x:Name="btn_mainRemove" Content="Ngắt" Width="60" Click="btn_mainRemove_Click"/>
                     <TextBlock Text="{Binding DeviceId}" VerticalAlignment="Center"/>
                     <CheckBox Content="Đồng bộ" VerticalAlignment="Center" IsChecked="{Binding DeviceView.IsSync}"/>
-
-
                 </StackPanel>
 
                 <Grid Grid.Row="1" x:Name="mainGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -62,12 +60,12 @@
             <ListView ItemsSource="{Binding DeviceViews}" Margin="5,0" st:StackPanel.Fill="Fill">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
+                        <WrapPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid HorizontalAlignment="Left" Height="{Binding Height}" Width="{Binding Width}" VerticalAlignment="Top">
+                        <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Height="{Binding Height}" Width="{Binding Width}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="35"/>
                                 <RowDefinition Height="1*"/>
