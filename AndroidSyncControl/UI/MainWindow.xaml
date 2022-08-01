@@ -57,7 +57,7 @@
             </Grid>
 
 
-            <ListView ItemsSource="{Binding DeviceViews}" Margin="5,0" st:StackPanel.Fill="Fill">
+            <ListView ItemsSource="{Binding DeviceViews}" Margin="5,0" st:StackPanel.Fill="Fill" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Orientation="Horizontal"/>
