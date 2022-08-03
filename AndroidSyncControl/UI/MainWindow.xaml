@@ -32,6 +32,7 @@
             </ComboBox>
             <Button Width="90" Content="Show Main" x:Name="btn_showMain" Click="btn_showMain_Click"/>
             <Button Width="90" Content="Show ListView" x:Name="btn_showListView" Click="btn_showListView_Click"/>
+            <Button Width="120" Content="Show All in ListView" x:Name="btn_showAllListView" Click="btn_showAllListView_Click"/>
             <Slider x:Name="slider" Maximum="100" Minimum="1" Value="{Binding ViewPercent}" Width="200" ValueChanged="slider_ValueChanged" 
                     ToolTip="{Binding ViewPercent}"/>
             <TextBlock Text="MaxFps:" VerticalAlignment="Center"/>

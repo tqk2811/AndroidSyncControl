@@ -138,6 +138,7 @@ namespace AndroidSyncControl.UI
                     for (int i = 0; i < 3; i++)
                     {
                         DeviceView deviceView = new DeviceView(deviceid);
+                        deviceView.OnConencted += DeviceView_OnConencted;
                         mainWVM.DeviceViews.Add(deviceView);
                         await deviceView.Start();
                         deviceView.SliderChange(mainWVM.ViewPercent);
@@ -150,10 +151,15 @@ namespace AndroidSyncControl.UI
 #endif
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message + ex.StackTrace, ex.GetType().FullName);
             }
+        }
+
+        private void DeviceView_OnConencted()
+        {
+            mainWVM.DeviceView?.SetControlChain(mainWVM.DeviceViews.Select(x => x.RawControl));
         }
 
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -187,9 +193,9 @@ namespace AndroidSyncControl.UI
                     deviceView.Stop();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message + ex.StackTrace, ex.GetType().FullName);
             }
         }
 
@@ -206,9 +212,27 @@ namespace AndroidSyncControl.UI
                         mainGrid.Width = 0;
                     }
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message + ex.StackTrace, ex.GetType().FullName);
+            }
+        }
 
+        private async void btn_showAllListView_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                foreach (var item in mainWVM.DeviceNameList.ToList())
+                {
+                    DeviceView deviceView = new DeviceView(item.Name);
+                    mainWVM.DeviceViews.Add(deviceView);
+                    await deviceView.Start();
+                    deviceView.SliderChange(mainWVM.ViewPercent);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace, ex.GetType().FullName);
             }
         }
     }

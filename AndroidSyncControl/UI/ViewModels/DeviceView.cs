@@ -23,6 +23,7 @@ namespace AndroidSyncControl.UI.ViewModels
             this.scrcpy = new Scrcpy(DeviceId);
             this.adb = new Adb(DeviceId);
             this.Control = scrcpy.Control;
+            this.ScrcpyUiView = scrcpy.InitScrcpyUiView();
             this.scrcpy.OnDisconnect += Scrcpy_OnDisconnect;
         }
 
@@ -60,7 +61,7 @@ namespace AndroidSyncControl.UI.ViewModels
         IControl _Control;
         public IControl Control
         {
-            get { return isConnecting ? null : (IsSync ? _Control : RawControl); }
+            get { return IsSync ? _Control : RawControl; }
             set { _Control = value; NotifyPropertyChange(); }
         }
 
@@ -72,12 +73,7 @@ namespace AndroidSyncControl.UI.ViewModels
             set { _IsSync = value; NotifyPropertyChange(); NotifyPropertyChange(nameof(Control)); }
         }
 
-        ScrcpyUiView _ScrcpyUiView;
-        public ScrcpyUiView ScrcpyUiView
-        {
-            get { return _ScrcpyUiView; }
-            set { _ScrcpyUiView = value; NotifyPropertyChange(); }
-        }
+        public ScrcpyUiView ScrcpyUiView { get; }
         public IControl RawControl { get { return scrcpy.Control; } }
 
         double _Width = 250;
@@ -139,7 +135,7 @@ namespace AndroidSyncControl.UI.ViewModels
                         Debug.WriteLine($"getprop init.svc.bootanim: {stdout}");
 #endif
                         if (stdout.StartsWith("stopped")) break;
-                        else await Task.Delay(200, cancellationTokenSource.Token);
+                        else await Task.Delay(500, cancellationTokenSource.Token);
                     }
                     if (await Start())
                     {
@@ -169,43 +165,27 @@ namespace AndroidSyncControl.UI.ViewModels
 #if DEBUG
                 Debug.WriteLine($"scrcpy.Connect");
 #endif
-                //lock (_lock)
+                if (scrcpy.Connect(new ScrcpyConfig()
                 {
-                    try
-                    {
-                        isConnecting = true;
-                        NotifyPropertyChange(nameof(Control));
-
-                        using (var temp = ScrcpyUiView) ScrcpyUiView = null;
-
-                        if (scrcpy.Connect(new ScrcpyConfig()
-                        {
-                            ClipboardAutosync = false,
-                            HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
-                            IsUseD3D11Shader = true,
-                            MaxFps = Singleton.Setting.Setting.MaxFps,
-                            IsControl = true,
-                            PowerOn = true,
-                            StayAwake = true,
-                            ShowTouches = true,
-                            ConnectionTimeout = 3000,
-                            Orientation = Orientations.Natural,
-                        }))
-                        {
-                            this.ScrcpyUiView = scrcpy.InitScrcpyUiView();
-                            isStop = false;
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    finally
-                    {
-                        isConnecting = false;
-                        NotifyPropertyChange(nameof(Control));
-                    }
+                    ClipboardAutosync = false,
+                    HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
+                    IsUseD3D11Shader = true,
+                    MaxFps = Singleton.Setting.Setting.MaxFps,
+                    IsControl = true,
+                    PowerOn = true,
+                    StayAwake = true,
+                    ShowTouches = true,
+                    ConnectionTimeout = 3000,
+                    Orientation = Orientations.Natural,
+                }))
+                {
+                    //this.ScrcpyUiView = scrcpy.InitScrcpyUiView();
+                    isStop = false;
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
