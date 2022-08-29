@@ -9,6 +9,7 @@ using TqkLibrary.Scrcpy.Wpf;
 using TqkLibrary.AdbDotNet;
 using System.Threading;
 using System.Diagnostics;
+using System.Windows;
 
 namespace AndroidSyncControl.UI.ViewModels
 {
@@ -134,7 +135,7 @@ namespace AndroidSyncControl.UI.ViewModels
 #if DEBUG
                         Debug.WriteLine($"getprop init.svc.bootanim: {stdout}");
 #endif
-                        if (stdout.StartsWith("stopped")) break;
+                        if (stdout.Contains("stopped")) break;
                         else await Task.Delay(500, cancellationTokenSource.Token);
                     }
                     if (await Start())
@@ -153,11 +154,10 @@ namespace AndroidSyncControl.UI.ViewModels
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message + ex.StackTrace, ex.GetType().FullName);
             }
         }
 
-        static readonly object _lock = new object();
         public Task<bool> Start()
         {
             return Task.Factory.StartNew(() =>

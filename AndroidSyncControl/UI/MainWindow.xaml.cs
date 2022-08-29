@@ -157,11 +157,6 @@ namespace AndroidSyncControl.UI
             }
         }
 
-        private void DeviceView_OnConencted()
-        {
-            mainWVM.DeviceView?.SetControlChain(mainWVM.DeviceViews.Select(x => x.RawControl));
-        }
-
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (mainWVM != null)
