@@ -138,7 +138,7 @@ namespace AndroidSyncControl.UI
                     for (int i = 0; i < 3; i++)
                     {
                         DeviceView deviceView = new DeviceView(deviceid);
-                        deviceView.OnConencted += DeviceView_OnConencted;
+                        //deviceView.OnConencted += DeviceView_OnConencted;
                         mainWVM.DeviceViews.Add(deviceView);
                         await deviceView.Start();
                         deviceView.SliderChange(mainWVM.ViewPercent);

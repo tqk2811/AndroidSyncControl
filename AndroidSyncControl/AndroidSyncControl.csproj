@@ -13,8 +13,7 @@
 		<PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
 		<PackageReference Include="TqkLibrary.AdbDotNet" Version="1.0.0-build2022070800" />
 		<PackageReference Include="TqkLibrary.Scrcpy" Version="1.0.0" />
-		<PackageReference Include="TqkLibrary.Scrcpy.Wpf" Version="1.0.1" />
-		<PackageReference Include="TqkLibrary.ScrcpyNative-x64" Version="1.0.1-view" />
+		<PackageReference Include="TqkLibrary.Scrcpy.Wpf" Version="1.0.0" />
 		<PackageReference Include="TqkLibrary.WpfUi" Version="1.0.0-build2022050602" />
 	</ItemGroup>
 
