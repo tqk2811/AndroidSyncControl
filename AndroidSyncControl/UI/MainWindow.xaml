@@ -48,7 +48,7 @@
 
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Wpfui:Spacing.Horizontal="5" Margin="5">
                     <Button x:Name="btn_mainRemove" Content="Ngắt" Width="60" Click="btn_mainRemove_Click"/>
-                    <TextBlock Text="{Binding DeviceId}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding DeviceView.DeviceId}" VerticalAlignment="Center"/>
                     <CheckBox Content="Đồng bộ" VerticalAlignment="Center" IsChecked="{Binding DeviceView.IsSync}"/>
                 </StackPanel>
 
