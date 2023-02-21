@@ -113,7 +113,7 @@ namespace AndroidSyncControl.UI
                         btn_mainRemove_Click(null, null);
                     }
 
-                    DeviceView deviceView = new DeviceView(deviceid);
+                    DeviceView deviceView = new DeviceView(mainWVM, deviceid);
                     mainWVM.DeviceView = deviceView;
                     await deviceView.Start();
                     parentMainGrid.Width = deviceView.MainView(mainGrid.ActualHeight);
@@ -137,14 +137,14 @@ namespace AndroidSyncControl.UI
 #if DEBUG
                     for (int i = 0; i < 3; i++)
                     {
-                        DeviceView deviceView = new DeviceView(deviceid);
+                        DeviceView deviceView = new DeviceView(mainWVM, deviceid);
                         //deviceView.OnConencted += DeviceView_OnConencted;
                         mainWVM.DeviceViews.Add(deviceView);
                         await deviceView.Start();
                         deviceView.SliderChange(mainWVM.ViewPercent);
                     }
 #else
-                    DeviceView deviceView = new DeviceView(deviceid);
+                    DeviceView deviceView = new DeviceView(mainWVM, deviceid);
                     mainWVM.DeviceViews.Add(deviceView);
                     await deviceView.Start();
                     deviceView.SliderChange(mainWVM.ViewPercent);
@@ -219,7 +219,7 @@ namespace AndroidSyncControl.UI
             {
                 foreach (var item in mainWVM.DeviceNameList.ToList())
                 {
-                    DeviceView deviceView = new DeviceView(item.Name);
+                    DeviceView deviceView = new DeviceView(mainWVM, item.Name);
                     mainWVM.DeviceViews.Add(deviceView);
                     await deviceView.Start();
                     deviceView.SliderChange(mainWVM.ViewPercent);

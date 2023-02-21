@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 using TqkLibrary.WpfUi;
 using TqkLibrary.Scrcpy.Wpf;
 using System.Collections.ObjectModel;
+using TqkLibrary.Scrcpy;
 
 namespace AndroidSyncControl.UI.ViewModels
 {
     class MainWVM : BaseViewModel
     {
+        public MainWVM()
+        {
+            foreach (var item in ScrcpyConfig.GetHwSupports())
+            {
+                AVHWDeviceTypes.Add(item);
+            }
+        }
+
         DeviceView _DeviceView = null;
         public DeviceView DeviceView
         {
@@ -39,6 +48,16 @@ namespace AndroidSyncControl.UI.ViewModels
         {
             get { return _DeviceNameListSelected; }
             set { _DeviceNameListSelected = value; NotifyPropertyChange(); }
+        }
+
+
+        public ObservableCollection<FFmpegAVHWDeviceType> AVHWDeviceTypes { get; } = new ObservableCollection<FFmpegAVHWDeviceType>();
+
+        FFmpegAVHWDeviceType _AVHWDeviceTypeSelected = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA;
+        public FFmpegAVHWDeviceType AVHWDeviceTypeSelected
+        {
+            get { return _AVHWDeviceTypeSelected; }
+            set { _AVHWDeviceTypeSelected = value; NotifyPropertyChange(); }
         }
     }
 }

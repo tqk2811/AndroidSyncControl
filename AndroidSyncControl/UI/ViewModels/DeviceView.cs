@@ -15,12 +15,14 @@ namespace AndroidSyncControl.UI.ViewModels
 {
     class DeviceView : BaseViewModel, IDisposable
     {
+        readonly MainWVM mainWVM;
         readonly Scrcpy scrcpy;
         readonly Adb adb;
         readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         bool isStop = false;
-        public DeviceView(string DeviceId)
+        public DeviceView(MainWVM mainWVM, string DeviceId)
         {
+            this.mainWVM = mainWVM ?? throw new ArgumentNullException(nameof(mainWVM));
             this.scrcpy = new Scrcpy(DeviceId);
             this.adb = new Adb(DeviceId);
             this.Control = scrcpy.Control;
@@ -168,7 +170,7 @@ namespace AndroidSyncControl.UI.ViewModels
                 if (scrcpy.Connect(new ScrcpyConfig()
                 {
                     ClipboardAutosync = false,
-                    HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
+                    HwType = mainWVM.AVHWDeviceTypeSelected,
                     IsUseD3D11Shader = true,
                     MaxFps = Singleton.Setting.Setting.MaxFps,
                     IsControl = true,
