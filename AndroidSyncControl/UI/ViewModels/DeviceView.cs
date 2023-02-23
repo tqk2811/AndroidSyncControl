@@ -175,7 +175,7 @@ namespace AndroidSyncControl.UI.ViewModels
                     PowerOn = true,
                     StayAwake = true,
                     ShowTouches = true,
-                    ConnectionTimeout = 3000,
+                    ConnectionTimeout = Singleton.Setting.Setting.Timeout,
                     Orientation = Orientations.Natural,
                 }))
                 {

@@ -10,5 +10,6 @@ namespace AndroidSyncControl.DataClass
     {
         public double ViewPercent { get; set; } = 30;
         public int MaxFps { get; set; } = 24;
+        public int Timeout { get; set; } = 5000;
     }
 }
