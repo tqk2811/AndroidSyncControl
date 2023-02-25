@@ -79,7 +79,8 @@
                                 <Button x:Name="btn_Remove" Content="Ngắt" Width="60" Click="btn_Remove_Click"/>
                                 <TextBlock Text="{Binding DeviceId}" VerticalAlignment="Center"/>
                             </StackPanel>
-                            <scrcpy:ScrcpyControl Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            <scrcpy:ScrcpyControl Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                                IsMouseHandler="True" IsKeyHandler="True"
                                 Control="{Binding Control}" IsControl="{Binding IsControl}" ScrcpyUiView="{Binding ScrcpyUiView}" />
                         </Grid>
                     </DataTemplate>
