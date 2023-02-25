@@ -121,9 +121,9 @@ namespace AndroidSyncControl.UI
                     deviceView.SetControlChain(mainWVM.DeviceViews.Select(x => x.RawControl));
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message + ex.StackTrace, ex.GetType().FullName);
             }
         }
 
