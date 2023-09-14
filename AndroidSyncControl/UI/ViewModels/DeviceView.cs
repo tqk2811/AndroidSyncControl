@@ -167,16 +167,19 @@ namespace AndroidSyncControl.UI.ViewModels
 #endif
                 if (scrcpy.Connect(new ScrcpyConfig()
                 {
-                    ClipboardAutosync = false,
                     HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
-                    IsUseD3D11Shader = true,
-                    MaxFps = Singleton.Setting.Setting.MaxFps,
-                    IsControl = true,
-                    PowerOn = true,
-                    StayAwake = true,
-                    ShowTouches = true,
+                    ServerConfig = new ScrcpyServerConfig()
+                    {
+                        IsAudio = false,
+                        IsControl = true,
+                        PowerOn = true,
+                        StayAwake = true,
+                        ShowTouches = true,
+                        Orientation = Orientations.Natural,
+                        ClipboardAutosync = false,
+                    },
+                    IsUseD3D11ForConvertAndUiRender = true,
                     ConnectionTimeout = Singleton.Setting.Setting.Timeout,
-                    Orientation = Orientations.Natural,
                 }))
                 {
                     //this.ScrcpyUiView = scrcpy.InitScrcpyUiView();
