@@ -10,6 +10,9 @@ using TqkLibrary.AdbDotNet;
 using System.Threading;
 using System.Diagnostics;
 using System.Windows;
+using TqkLibrary.Scrcpy.Interfaces;
+using TqkLibrary.Scrcpy.Enums;
+using TqkLibrary.Scrcpy.Configs;
 
 namespace AndroidSyncControl.UI.ViewModels
 {
@@ -170,15 +173,31 @@ namespace AndroidSyncControl.UI.ViewModels
                     HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
                     ServerConfig = new ScrcpyServerConfig()
                     {
-                        IsAudio = false,
+                        AudioConfig = new AudioConfig()
+                        {
+                            IsAudio = false,
+                        },
                         IsControl = true,
-                        PowerOn = true,
-                        StayAwake = true,
-                        ShowTouches = true,
-                        Orientation = Orientations.Natural,
+                        AndroidConfig = new()
+                        {
+                            PowerOn = true,
+                            PowerOffOnClose = false,
+                            ShowTouches = true,
+                            StayAwake = true,
+                        },
+                        VideoConfig = new()
+                        {
+                            MaxFps = 24,
+                            Orientation = Orientations.Natural,
+                        },
+                        Cleanup = false,
+                        VideoSource = VideoSource.Display,
+                        LogLevel = LogLevel.Debug,
                         ClipboardAutosync = false,
                     },
-                    IsUseD3D11ForConvertAndUiRender = true,
+                    IsUseD3D11ForConvert = true,
+                    IsUseD3D11ForUiRender = true,
+                    Filter = D3D11Filter.D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT,
                     ConnectionTimeout = Singleton.Setting.Setting.Timeout,
                 }))
                 {
