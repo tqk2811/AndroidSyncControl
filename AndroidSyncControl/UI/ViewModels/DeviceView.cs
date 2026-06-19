@@ -121,8 +121,10 @@ namespace AndroidSyncControl.UI.ViewModels
             Control = controlChains;
         }
 
-        private async void Scrcpy_OnDisconnect()
+        private async void Scrcpy_OnDisconnect(ScrcpyDisconnectSource scrcpyDisconnectSource)
         {
+            if (scrcpyDisconnectSource != ScrcpyDisconnectSource.Video)
+                return;
             try
             {
                 while (!isStop)
