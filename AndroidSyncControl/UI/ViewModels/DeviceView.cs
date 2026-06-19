@@ -173,6 +173,7 @@ namespace AndroidSyncControl.UI.ViewModels
                     HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
                     ServerConfig = new ScrcpyServerConfig()
                     {
+                        ScrcpyServerAndroidPath = "/sdcard/scrcpy-server-AndroidSyncControl-{ver}.jar",
                         AudioConfig = new AudioConfig()
                         {
                             IsAudio = false,
