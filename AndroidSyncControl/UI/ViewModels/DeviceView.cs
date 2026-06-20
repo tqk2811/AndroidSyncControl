@@ -190,7 +190,7 @@ namespace AndroidSyncControl.UI.ViewModels
                         },
                         VideoConfig = new()
                         {
-                            MaxFps = 24,
+                            MaxFps = Math.Max(1, Singleton.Setting.Setting.MaxFps),
                             Orientation = Orientations.Natural,
                         },
                         Cleanup = false,
