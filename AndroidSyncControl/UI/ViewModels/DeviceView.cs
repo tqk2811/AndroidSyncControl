@@ -191,7 +191,8 @@ namespace AndroidSyncControl.UI.ViewModels
                         VideoConfig = new()
                         {
                             MaxFps = Math.Max(1, Singleton.Setting.Setting.MaxFps),
-                            Orientation = Orientations.Natural,
+                            CaptureOrientation = CaptureOrientations.Orient0,
+                            CaptureOrientationLock = CaptureOrientationLock.LockedValue,
                         },
                         Cleanup = false,
                         VideoSource = VideoSource.Display,
