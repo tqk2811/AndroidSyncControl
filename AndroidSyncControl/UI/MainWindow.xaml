@@ -35,10 +35,14 @@
             <Button Width="120" Content="Show All in ListView" x:Name="btn_showAllListView" Click="btn_showAllListView_Click"/>
             <Slider x:Name="slider" Maximum="100" Minimum="1" Value="{Binding ViewPercent}" Width="200" ValueChanged="slider_ValueChanged" 
                     ToolTip="{Binding ViewPercent}"/>
-            <TextBlock Text="MaxFps:" VerticalAlignment="Center"/>
-            <Xceed:IntegerUpDown Width="40" Minimum="0" Maximum="120" Value="{Binding MaxFps}" Increment="1" VerticalAlignment="Center"/>
-            <TextBlock Text="MaxSize:" VerticalAlignment="Center"/>
-            <Xceed:IntegerUpDown Width="50" Minimum="0" Value="{Binding MaxSize}" Increment="8" VerticalAlignment="Center"/>
+            <TextBlock Text="MaxFps:" VerticalAlignment="Center"
+                       ToolTip="Giới hạn FPS tối đa của video (hiệu lực 1–120). Áp dụng khi kết nối lại."/>
+            <Xceed:IntegerUpDown Width="40" Minimum="0" Maximum="120" Value="{Binding MaxFps}" Increment="1" VerticalAlignment="Center"
+                       ToolTip="Giới hạn FPS tối đa của video (hiệu lực 1–120). Áp dụng khi kết nối lại."/>
+            <TextBlock Text="MaxSize:" VerticalAlignment="Center"
+                       ToolTip="Giới hạn cạnh dài nhất của video (px, bội số 8). Dưới 360 = không giới hạn (kích thước gốc). Áp dụng khi kết nối lại."/>
+            <Xceed:IntegerUpDown Width="50" Minimum="0" Value="{Binding MaxSize}" Increment="8" VerticalAlignment="Center"
+                       ToolTip="Giới hạn cạnh dài nhất của video (px, bội số 8). Dưới 360 = không giới hạn (kích thước gốc). Áp dụng khi kết nối lại."/>
             <CheckBox Content="GPU" VerticalAlignment="Center" IsChecked="{Binding UseGpu}"
                       ToolTip="Bật: dùng GPU giải mã (D3D11VA). Tắt: dùng CPU (none). Áp dụng khi kết nối lại."/>
         </st:StackPanel>
