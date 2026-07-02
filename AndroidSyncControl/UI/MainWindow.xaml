@@ -38,7 +38,7 @@
             <TextBlock Text="MaxFps:" VerticalAlignment="Center"/>
             <Xceed:IntegerUpDown Width="40" Minimum="0" Maximum="120" Value="{Binding MaxFps}" Increment="1" VerticalAlignment="Center"/>
             <TextBlock Text="MaxSize:" VerticalAlignment="Center"/>
-            <Xceed:IntegerUpDown Width="40" Minimum="0" Value="{Binding MaxSize}" Increment="8" VerticalAlignment="Center"/>
+            <Xceed:IntegerUpDown Width="50" Minimum="0" Value="{Binding MaxSize}" Increment="8" VerticalAlignment="Center"/>
         </StackPanel>
 
         <st:StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5" x:Name="stackPanel" SizeChanged="stackPanel_SizeChanged">
