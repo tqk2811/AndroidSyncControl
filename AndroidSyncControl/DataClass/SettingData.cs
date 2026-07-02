@@ -12,5 +12,6 @@ namespace AndroidSyncControl.DataClass
         public int MaxFps { get; set; } = 24;
         public int MaxSize { get; set; } = 0;
         public int Timeout { get; set; } = 5000;
+        public bool UseGpu { get; set; } = true;
     }
 }

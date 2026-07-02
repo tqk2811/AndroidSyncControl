@@ -21,7 +21,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Wpfui:Spacing.Horizontal="5" Margin="5">
+        <st:StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Wpfui:Spacing.Horizontal="5" Margin="5" MarginBetweenChildren="2">
             <TextBlock Text="Device: " VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding DeviceNameList}" SelectedItem="{Binding DeviceNameListSelected}" Width="200" VerticalAlignment="Center">
                 <ComboBox.ItemTemplate>
@@ -39,7 +39,9 @@
             <Xceed:IntegerUpDown Width="40" Minimum="0" Maximum="120" Value="{Binding MaxFps}" Increment="1" VerticalAlignment="Center"/>
             <TextBlock Text="MaxSize:" VerticalAlignment="Center"/>
             <Xceed:IntegerUpDown Width="50" Minimum="0" Value="{Binding MaxSize}" Increment="8" VerticalAlignment="Center"/>
-        </StackPanel>
+            <CheckBox Content="GPU" VerticalAlignment="Center" IsChecked="{Binding UseGpu}"
+                      ToolTip="Bật: dùng GPU giải mã (D3D11VA). Tắt: dùng CPU (none). Áp dụng khi kết nối lại."/>
+        </st:StackPanel>
 
         <st:StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5" x:Name="stackPanel" SizeChanged="stackPanel_SizeChanged">
             <Grid VerticalAlignment="Stretch" x:Name="parentMainGrid">

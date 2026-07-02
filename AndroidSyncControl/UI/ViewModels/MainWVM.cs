@@ -41,9 +41,14 @@ namespace AndroidSyncControl.UI.ViewModels
                 {
                     Singleton.Setting.Setting.MaxSize = value / 8 * 8;
                 }
-                NotifyPropertyChange(); 
+                NotifyPropertyChange();
                 Singleton.Setting.Save();
             }
+        }
+        public bool UseGpu
+        {
+            get { return Singleton.Setting.Setting.UseGpu; }
+            set { Singleton.Setting.Setting.UseGpu = value; NotifyPropertyChange(); Singleton.Setting.Save(); }
         }
 
         public ObservableCollection<DeviceView> DeviceViews { get; } = new ObservableCollection<DeviceView>();

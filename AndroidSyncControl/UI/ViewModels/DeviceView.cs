@@ -172,7 +172,9 @@ namespace AndroidSyncControl.UI.ViewModels
 #endif
                 if (scrcpy.Connect(new ScrcpyConfig()
                 {
-                    HwType = FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA,
+                    HwType = Singleton.Setting.Setting.UseGpu
+                        ? FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_D3D11VA
+                        : FFmpegAVHWDeviceType.AV_HWDEVICE_TYPE_NONE,
                     ServerConfig = new ScrcpyServerConfig()
                     {
                         ScrcpyServerAndroidPath = "/sdcard/scrcpy-server-AndroidSyncControl-{ver}.jar",
@@ -200,7 +202,7 @@ namespace AndroidSyncControl.UI.ViewModels
                         ClipboardAutosync = false,
                         MaxSize = Singleton.Setting.Setting.MaxSize,
                     },
-                    IsUseD3D11ForConvert = true,
+                    IsUseD3D11ForConvert = false,
                     IsUseD3D11ForUiRender = true,
                     Filter = D3D11Filter.D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT,
                     ConnectionTimeout = Singleton.Setting.Setting.Timeout,
