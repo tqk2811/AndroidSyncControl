@@ -28,6 +28,23 @@ namespace AndroidSyncControl.UI.ViewModels
             get { return Singleton.Setting.Setting.MaxFps; }
             set { Singleton.Setting.Setting.MaxFps = value; NotifyPropertyChange(); Singleton.Setting.Save(); }
         }
+        public int MaxSize
+        {
+            get { return Singleton.Setting.Setting.MaxSize; }
+            set
+            {
+                if(value < 360)
+                {
+                    Singleton.Setting.Setting.MaxSize = 0;
+                }
+                else
+                {
+                    Singleton.Setting.Setting.MaxSize = value / 8 * 8;
+                }
+                NotifyPropertyChange(); 
+                Singleton.Setting.Save();
+            }
+        }
 
         public ObservableCollection<DeviceView> DeviceViews { get; } = new ObservableCollection<DeviceView>();
 

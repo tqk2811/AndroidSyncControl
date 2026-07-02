@@ -198,6 +198,7 @@ namespace AndroidSyncControl.UI.ViewModels
                         VideoSource = VideoSource.Display,
                         LogLevel = LogLevel.Debug,
                         ClipboardAutosync = false,
+                        MaxSize = Singleton.Setting.Setting.MaxSize,
                     },
                     IsUseD3D11ForConvert = true,
                     IsUseD3D11ForUiRender = true,

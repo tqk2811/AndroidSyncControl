@@ -11,7 +11,7 @@
         xmlns:Wpfui="clr-namespace:TqkLibrary.WpfUi.UserControls;assembly=TqkLibrary.WpfUi"
         xmlns:Xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Android Sync Control" Height="450" Width="800" >
+        Title="Android Sync Control" Height="450" Width="1068" >
     <Window.DataContext>
         <ViewModels:MainWVM/>
     </Window.DataContext>
@@ -37,6 +37,8 @@
                     ToolTip="{Binding ViewPercent}"/>
             <TextBlock Text="MaxFps:" VerticalAlignment="Center"/>
             <Xceed:IntegerUpDown Width="40" Minimum="0" Maximum="120" Value="{Binding MaxFps}" Increment="1" VerticalAlignment="Center"/>
+            <TextBlock Text="MaxSize:" VerticalAlignment="Center"/>
+            <Xceed:IntegerUpDown Width="40" Minimum="0" Value="{Binding MaxSize}" Increment="8" VerticalAlignment="Center"/>
         </StackPanel>
 
         <st:StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5" x:Name="stackPanel" SizeChanged="stackPanel_SizeChanged">
