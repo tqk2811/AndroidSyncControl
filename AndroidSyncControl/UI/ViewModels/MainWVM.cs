@@ -33,7 +33,7 @@ namespace AndroidSyncControl.UI.ViewModels
             get { return Singleton.Setting.Setting.MaxSize; }
             set
             {
-                if(value < 360)
+                if(value < 240)
                 {
                     Singleton.Setting.Setting.MaxSize = 0;
                 }
