@@ -1,28 +1,45 @@
 name: Release
 
-# CI build + publish. Does NOT run by default: only builds when the head commit of the push
-# contains the marker '[release]'. Also runnable manually (workflow_dispatch).
+# CI build + publish. KHONG chay mac dinh: chi build khi commit (head cua push) chua marker
+# '[release]'. Cung cho chay tay (workflow_dispatch).
+# Mode notes-only: marker '[release_notes_only]' (hoac dispatch voi input release_notes_only)
+# chi sinh lai GitHub Release notes (khong build/publish/zip/upload); khong tinh HEAD la diem build.
 #
-# /releases model: each minor line M.N has one GitHub Release named by the tag 'M.N.0'.
-# Each run -> build version 'M.N.<commits-since-tag>' -> upload the app zip
-# (AndroidSyncControl-<version>-<TargetFramework>.zip) as an asset to Release 'M.N.0'
-# + update the notes (ascending, numbered) for the commits since 'M.N.0'.
+# Mo hinh /releases: moi dong minor M.N co 1 GitHub Release ten theo tag 'M.N.0' (khong prefix 'v').
+# Moi lan chay -> build version 'M.N.<so-commit>' -> upload zip
+# (AndroidSyncControl-<version>-<TargetFramework>.zip) lam asset vao Release 'M.N.0'
+# + cap nhat notes (tang dan, gom theo tung build [release]) cac change ke tu 'M.N.0'.
 #
-# Precondition: tag 'M.N.0' must already exist on origin (GitVersion source + Release name).
+# CHI chay tren branch 'master': push branch khac khong trigger, va workflow_dispatch tu ref
+# khac master bi chan o dieu kien 'if' cua job (github.ref != refs/heads/master -> skip).
+#
+# Tien dieu kien: tag 'M.N.0' phai ton tai tren origin truoc (moc GitVersion + ten Release).
 
 on:
   push:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      release_notes_only:
+        description: 'Only regenerate GitHub Release notes (skip build/publish/zip/upload)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 jobs:
   release:
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[release]')
+    if: >-
+      github.ref == 'refs/heads/master' &&
+      (github.event_name == 'workflow_dispatch' ||
+       contains(github.event.head_commit.message, '[release]') ||
+       contains(github.event.head_commit.message, '[release_notes_only]'))
     runs-on: windows-latest
+    env:
+      # 'true' khi chi sinh notes: dispatch chon release_notes_only, hoac head commit chua '[release_notes_only]'
+      NOTES_ONLY: ${{ inputs.release_notes_only || contains(github.event.head_commit.message, '[release_notes_only]') }}
     steps:
       - name: Checkout (full history + tags)
         uses: actions/checkout@v4
@@ -32,6 +49,7 @@ jobs:
       # The app targets net8.0-windows; a newer SDK builds it via reference packs, so any
       # SDK major >= 8 is enough. Only run setup-dotnet when none is present.
       - name: Check installed .NET SDKs
+        if: env.NOTES_ONLY != 'true'
         id: dotnet_check
         shell: pwsh
         run: |
@@ -43,7 +61,7 @@ jobs:
           Write-Host "Have .NET SDK >= 8: $haveSdk  -> install=$install"
 
       - name: Setup .NET
-        if: steps.dotnet_check.outputs.install == 'true'
+        if: ${{ env.NOTES_ONLY != 'true' && steps.dotnet_check.outputs.install == 'true' }}
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
@@ -61,6 +79,7 @@ jobs:
           Add-Content -Path $env:GITHUB_PATH -Value $exe.DirectoryName
 
       - name: Build + publish + zip
+        if: env.NOTES_ONLY != 'true'
         shell: pwsh
         run: ./.github/workflows/BuildCI.ps1   # publish + zip only; release handled below
 
@@ -70,22 +89,56 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $ErrorActionPreference = 'Stop'
-          $zip = Get-ChildItem ./publish/*.zip | Select-Object -First 1
-          if (-not $zip) { throw "No zip produced by BuildCI.ps1" }
-          if ($zip.BaseName -notmatch '^AndroidSyncControl-(\d+)\.(\d+)\.(\d+)-(.+)$') { throw "Cannot parse version from $($zip.Name)" }
-          $major = $Matches[1]; $minor = $Matches[2]
+          $notesOnly = $env:NOTES_ONLY -eq 'true'
+          if ($notesOnly) {
+            # Notes-only: khong build nen khong co zip -> suy M.N tu tag gan nhat tren master.
+            $near = "$(git describe --tags --abbrev=0 --match "[0-9]*")".Trim()
+            if ($near -notmatch '^v?(\d+)\.(\d+)\.') { throw "Cannot derive minor line from tag '$near'" }
+            $major = $Matches[1]; $minor = $Matches[2]
+          } else {
+            $zip = Get-ChildItem ./publish/*.zip | Select-Object -First 1
+            if (-not $zip) { throw "No zip produced by BuildCI.ps1" }
+            if ($zip.BaseName -notmatch '^AndroidSyncControl-(\d+)\.(\d+)\.(\d+)-(.+)$') { throw "Cannot parse version from $($zip.Name)" }
+            $major = $Matches[1]; $minor = $Matches[2]
+          }
           $tag = "$major.$minor.0"   # release tag has no 'v' prefix (matches the 1.0.0 tag)
           $mn  = "$major.$minor"
-          Write-Host "zip=$($zip.Name)  release-tag=$tag"
+          if ($notesOnly) { Write-Host "notes-only  release-tag=$tag" }
+          else { Write-Host "zip=$($zip.Name)  release-tag=$tag" }
 
-          # Release notes: commits since tag M.N.0, ascending, numbered M.N.<n>.
-          # Use range '<tag>..HEAD' (correct topology); template emits '__MN__' -> replace with M.N.
-          $notes = git-cliff --config cliff-release.toml "$tag..HEAD" | Out-String
-          $notes = ($notes -replace '__MN__', $mn).Trim()
+          # Release notes: moi BUILD la 1 header '- M.N.<zzz>' voi zzz = rev-list --count tag..R
+          # (khop version zip vi GitVersion dem MOI commit). Diem build R = cac commit
+          # first-parent co marker '[release]' + HEAD hien tai (build cua run nay, khong trung
+          # neu HEAD chinh la [release]). Muc con '  + ...' = moi commit moi reachable trong
+          # (R_truoc..R] - tu nhien gom ca commit merge tu branch khac.
+          # git-cliff chi format tung commit, moi dong prefix '__SHA_<sha>__' de tra cuu.
+          $lineOf = @{}
+          foreach ($l in @(git-cliff --config cliff-release.toml "$tag..HEAD")) {
+            if ($l -match '^__SHA_([0-9a-f]+)__ (.*)$') { $lineOf[$Matches[1]] = $Matches[2] }
+          }
+          $fps = @(git rev-list --first-parent --reverse "$tag..HEAD")
+          $points = @($fps | Where-Object { (git log -1 --format=%B $_) -match '\[release\]' })
+          if (-not $notesOnly -and $fps.Count -gt 0 -and ($points.Count -eq 0 -or $points[-1] -ne $fps[-1])) {
+            $points += $fps[-1]   # HEAD = build dang phat hanh boi run nay (bo qua khi notes-only)
+          }
+          $out = New-Object System.Collections.Generic.List[string]
+          $prev = $tag
+          foreach ($r in $points) {
+            $n = [int](git rev-list --count "$tag..$r")
+            # Header luon hien, ke ca nhom rong (build khong co thay doi thuoc loai hien thi)
+            $out.Add("- $mn.$n")
+            foreach ($c in @(git rev-list --reverse $r --not $prev)) {
+              if ($lineOf.ContainsKey($c)) { $out.Add("  + $($lineOf[$c])") }
+            }
+            $prev = $r
+          }
+          $notes = ($out -join "`n").Trim()
+          # Link commit trong tung muc: template emit '__REPO__' -> URL repo hien tai
+          $notes = $notes -replace '__REPO__', "$($env:GITHUB_SERVER_URL)/$($env:GITHUB_REPOSITORY)"
           if ([string]::IsNullOrWhiteSpace($notes)) { $notes = "Release $tag" }
           Set-Content -Path RELEASE_NOTES.md -Value $notes -Encoding utf8
 
-          # Create Release 'M.N.0' if missing (on the already-pushed tag), else update its notes.
+          # Tao Release 'M.N.0' neu chua co (tren tag da ton tai), neu co thi cap nhat notes.
           gh release view $tag *> $null
           if ($LASTEXITCODE -eq 0) {
             gh release edit $tag --notes-file RELEASE_NOTES.md
@@ -93,5 +146,9 @@ jobs:
             gh release create $tag --title $tag --notes-file RELEASE_NOTES.md --verify-tag
           }
 
-          # Attach this build's zip (clobber if rebuilding the same version).
-          gh release upload $tag $zip.FullName --clobber
+          if ($notesOnly) {
+            Write-Host "notes-only mode -> skip zip upload"
+          } else {
+            # Dinh kem zip cua lan build nay (clobber neu rebuild cung version).
+            gh release upload $tag $zip.FullName --clobber
+          }

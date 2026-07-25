@@ -1,16 +1,24 @@
-# git-cliff config for GitHub Release notes (used by .github/workflows/release.yml).
-# Differs from cliff.toml (local CHANGELOG.md): NO header/footer, ASCENDING order
-# (oldest first), numbered M.N.<n>. Used with range '<tag>..HEAD' (commits since tag M.N.0).
+# git-cliff config rieng cho GitHub Release notes (sinh boi CI .github/workflows/release.yml).
+# Khac cliff.toml (CHANGELOG.md local): KHONG header/footer. Dung voi range '<tag>..HEAD'
+# (moi commit ke tu tag M.N.0, gom ca commit merge vao tu branch khac).
+#
+# Template CHI emit '__SHA_<sha>__ <noi dung da format>' cho tung commit (khong danh so,
+# khong phu thuoc thu tu output). release.yml dung sha de dung cau truc notes theo cac
+# BUILD '[release]':
+# - Diem build R = commit first-parent co marker '[release]' (+ HEAD cua run hien tai);
+#   header '- M.N.<zzz>' voi zzz = rev-list --count tag..R (= version artifact, GitVersion dem MOI commit)
+# - Muc con '  + <noi dung>' = moi commit moi trong (R_truoc..R], gom ca commit merge tu branch khac
 
 [changelog]
 header = ""
-# Only list change types users care about. Filter at the DISPLAY step (not skipped from
-# the array) so loop.index stays = real commit count since the tag -> correct numbers,
-# with gaps where a type is hidden. To add/remove types edit `commit.group in [...]` below.
+# Chi liet ke cac loai thay doi nguoi dung quan tam (loc o buoc hien thi).
+# Muon them/bot loai: sua danh sach trong `commit.group in [...]` ben duoi.
+# Moi muc co link toi commit: dat tren scope, commit khong scope thi dat tren (type).
+# '__REPO__' duoc release.yml thay bang $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.
 body = """
 {% for commit in commits %}\
-{% if commit.group in ["feat", "fix", "perf", "revert"] %}\
-- __MN__.{{ loop.index }} ({{ commit.group }}){% if commit.scope %} **{{ commit.scope }}**{% endif %} {{ commit.message | upper_first }}{% if commit.breaking %} [**breaking**]{% endif %}
+{% if commit.group in ["feat", "fix", "perf", "revert", "refactor", "chore"] %}\
+__SHA_{{ commit.id }}__ {% if commit.scope %}({{ commit.group }}) [**{{ commit.scope }}**](__REPO__/commit/{{ commit.id }}){% else %}[({{ commit.group }})](__REPO__/commit/{{ commit.id }}){% endif %} {{ commit.message | upper_first }}{% if commit.breaking %} [**breaking**]{% endif %}
 {% endif %}\
 {% endfor %}\
 """
@@ -38,10 +46,10 @@ commit_parsers = [
     { message = "^sample", group = "sample" },
     { message = "^chore", group = "chore" },
     { message = ".*", group = "other" },
-    # No skip here: every commit must stay in the array so loop.index = real commit count
-    # since the tag (= GitVersion). Which types are shown is decided in the body template.
+    # Danh so/thu tu deu do release.yml quyet (tra cuu theo sha) nen skip khong pha gi;
+    # van loc loai hien thi o body template cho gon 1 cho.
 ]
 filter_commits = false
 tag_pattern = '[vV]?[0-9]+\.[0-9]+\.[0-9]+'
-# Ascending: oldest commit (right after the tag) first, loop.index = 1 -> M.N.1
+# Thu tu output khong quan trong (release.yml tra cuu theo sha); oldest cho deterministic.
 sort_commits = "oldest"
