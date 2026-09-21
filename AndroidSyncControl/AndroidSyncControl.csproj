@@ -7,6 +7,7 @@
 		<UseWPF>true</UseWPF>
 		<Platforms>x64</Platforms>
 		<ApplicationIcon>Resources\appicon.ico</ApplicationIcon>
+		<Copyright>Copyright (c) 2022-2026 tqk2811</Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>

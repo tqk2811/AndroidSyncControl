@@ -7,7 +7,7 @@
 ![Nền tảng](https://img.shields.io/badge/platform-Windows%2010%2F11%20x64-0078D6)
 ![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
 ![Dựa trên scrcpy](https://img.shields.io/badge/based%20on-scrcpy-3DDC84)
-![Giấy phép](https://img.shields.io/badge/license-GPLv3-blue)
+![Giấy phép](https://img.shields.io/badge/license-MIT-blue)
 
 Android Sync Control là ứng dụng Windows gọn nhẹ giúp phản chiếu và điều khiển nhiều thiết bị
 Android cùng lúc. Bật **Đồng bộ** trên máy chính, mọi thao tác chạm và phím sẽ được gửi tới tất
@@ -96,10 +96,14 @@ Dự án này được xây dựng dựa trên các dự án mã nguồn mở tu
 
 - **[scrcpy](https://github.com/Genymobile/scrcpy)** của Genymobile — giấy phép
   **Apache License 2.0**. Android Sync Control dùng scrcpy để phản chiếu và điều khiển thiết bị.
-- **[FFmpeg](https://ffmpeg.org)** — dùng để giải mã video/âm thanh, theo giấy phép
-  **GNU General Public License v3 (GPLv3)**.
+- **[FFmpeg](https://ffmpeg.org)** — dùng để giải mã video/âm thanh. Bản đóng gói kèm theo dùng
+  giấy phép **GNU Lesser General Public License v2.1 trở lên (LGPL-2.1-or-later)**.
 
-Vì có đóng gói và liên kết với bản FFmpeg GPLv3, việc phân phối Android Sync Control tuân theo
-các điều khoản của **GPLv3**.
+Bản thân Android Sync Control phát hành theo **Giấy phép MIT** — xem [LICENSE](LICENSE).
+Các thư viện FFmpeg đi kèm ở dạng DLL riêng (`av*.dll`, `sw*.dll`) nằm cạnh file chạy và chỉ được
+liên kết động, nên vẫn giữ giấy phép LGPL-2.1-or-later của chúng: bạn có thể thay chúng bằng bản
+dựng tương thích của riêng mình.
+Các thành phần bên thứ ba đi kèm và toàn văn giấy phép của chúng được liệt kê ở
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 Thực hiện bởi [tqk2811](https://github.com/tqk2811).

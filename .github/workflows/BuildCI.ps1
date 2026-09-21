@@ -52,6 +52,13 @@ New-Item -ItemType Directory -Force -Path $appDir | Out-Null
 dotnet publish $proj -c Release -r win-x64 --self-contained false -o $appDir
 if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 
+# Ship the license notices next to the binaries (MIT requires the notice to travel with every
+# copy; the FFmpeg DLLs are LGPL-2.1 and adb/scrcpy-server are Apache-2.0, whose full texts go
+# into licenses and are referenced from THIRD-PARTY-NOTICES.md).
+Copy-Item (Join-Path $root 'LICENSE') -Destination $appDir -Force
+Copy-Item (Join-Path $root 'THIRD-PARTY-NOTICES.md') -Destination $appDir -Force
+Copy-Item (Join-Path $root 'licenses') -Destination $appDir -Recurse -Force
+
 # Zip the published folder (archive keeps a top-level AndroidSyncControl\ folder).
 $zipPath = Join-Path $publishDir "AndroidSyncControl-$version-$tfm.zip"
 Compress-Archive -Path $appDir -DestinationPath $zipPath -Force

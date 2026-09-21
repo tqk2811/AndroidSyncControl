@@ -7,7 +7,7 @@
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11%20x64-0078D6)
 ![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
 ![Based on scrcpy](https://img.shields.io/badge/based%20on-scrcpy-3DDC84)
-![License](https://img.shields.io/badge/license-GPLv3-blue)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
 Android Sync Control is a lightweight Windows desktop app that mirrors and controls many
 Android devices simultaneously. Tick **Sync** on the main device and every touch and key
@@ -96,10 +96,14 @@ This project stands on the shoulders of great open-source work:
 
 - **[scrcpy](https://github.com/Genymobile/scrcpy)** by Genymobile — licensed under the
   **Apache License 2.0**. Android Sync Control uses scrcpy for device mirroring and control.
-- **[FFmpeg](https://ffmpeg.org)** — used for video/audio decoding, under the
-  **GNU General Public License v3 (GPLv3)**.
+- **[FFmpeg](https://ffmpeg.org)** — used for video/audio decoding. The shipped build is licensed
+  under the **GNU Lesser General Public License v2.1 or later (LGPL-2.1-or-later)**.
 
-Because it bundles and links a GPLv3 build of FFmpeg, distribution of Android Sync Control is
-subject to the terms of the **GPLv3**.
+Android Sync Control itself is released under the **MIT License** — see [LICENSE](LICENSE).
+The FFmpeg libraries are shipped as separate DLLs (`av*.dll`, `sw*.dll`) next to the executable
+and are only dynamically linked, so they keep their own LGPL-2.1-or-later terms: you may replace
+them with your own compatible build.
+The bundled third-party components and their license texts are listed in
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 Made by [tqk2811](https://github.com/tqk2811).
