@@ -15,6 +15,13 @@ namespace AndroidSyncControl.DataClass
         public bool UseGpu { get; set; } = true;
         public bool IsAudio { get; set; } = false;
 
+        /// <summary>Off by default: the MCP server can run any adb command on the attached devices.</summary>
+        public bool McpEnabled { get; set; } = false;
+        public int McpPort { get; set; } = 8765;
+
+        /// <summary>Bearer token of the MCP server, generated the first time it starts.</summary>
+        public string McpToken { get; set; } = "";
+
         /// <summary>UI theme mode: "System" (follow OS), "Light" or "Dark".</summary>
         public string Theme { get; set; } = "System";
 

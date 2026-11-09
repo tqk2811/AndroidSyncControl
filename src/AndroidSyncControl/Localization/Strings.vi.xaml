@@ -29,6 +29,11 @@
     <sys:String x:Key="Str.Tip.MaxSize">Giới hạn cạnh dài nhất của video (px, bội số 8). Dưới 360 = không giới hạn (kích thước gốc). Áp dụng khi kết nối lại.</sys:String>
     <sys:String x:Key="Str.Tip.Gpu">Bật: dùng GPU giải mã (D3D11VA). Tắt: dùng CPU (none). Áp dụng khi kết nối lại.</sys:String>
     <sys:String x:Key="Str.Tip.Audio">Bật: nhận và giải mã luồng âm thanh từ thiết bị. Áp dụng khi kết nối lại.</sys:String>
+    <sys:String x:Key="Str.Toolbar.Mcp">MCP server</sys:String>
+    <sys:String x:Key="Str.Tip.Mcp">Bật: cho phép agent AI trên máy này quét, xem, điều khiển thiết bị và chạy mọi lệnh adb trên thiết bị. Chỉ nhận kết nối cục bộ có token truy cập.</sys:String>
+    <sys:String x:Key="Str.Tip.McpPort">Cổng cục bộ của MCP server.</sys:String>
+    <sys:String x:Key="Str.Btn.McpCopy">Chép cấu hình</sys:String>
+    <sys:String x:Key="Str.Tip.McpCopy">Chép cấu hình cho MCP client, trong đó có token truy cập.</sys:String>
 
     <!-- ================= Device panels ================= -->
     <sys:String x:Key="Str.Btn.Disconnect">Ngắt</sys:String>

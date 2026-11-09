@@ -20,6 +20,8 @@ using AndroidSyncControl.Themes;
 using AndroidSyncControl.Themes.Enums;
 using AndroidSyncControl.Localization;
 using TqkLibrary.Scrcpy;
+using System.Text.Json;
+using AndroidSyncControl.Mcp;
 
 namespace AndroidSyncControl.UI
 {
@@ -30,6 +32,8 @@ namespace AndroidSyncControl.UI
     {
         readonly MainWVM mainWVM;
         readonly Timer timer;
+        McpDeviceHost mcpDeviceHost;
+        McpServerController mcpServerController;
         public MainWindow()
         {
             InitializeComponent();
@@ -50,6 +54,8 @@ namespace AndroidSyncControl.UI
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             LanguageManager.LanguageChanged -= OnLanguageChanged;
+            mcpDeviceHost?.Close();
+            mcpServerController?.Shutdown();
             mainWVM.DeviceView?.DetachView();
             using (var v = mainWVM.DeviceView) v?.Stop();
             foreach (var item in mainWVM.DeviceViews)
@@ -76,6 +82,12 @@ namespace AndroidSyncControl.UI
 
             UpdateThemeGlyph();
             UpdateMaximizeGlyph();
+
+            mcpDeviceHost = new McpDeviceHost(mainWVM, Dispatcher, RemoveMainDeviceView);
+            mcpServerController = new McpServerController(mainWVM, new McpServerHost(mcpDeviceHost, new AdbCommandRunner()));
+            mainWVM.McpConfigurationChanged += () => _ = mcpServerController.ApplyAsync();
+            if (mainWVM.McpEnabled)
+                _ = mcpServerController.ApplyAsync();
         }
 
         // Refresh the strings that are set from code-behind (theme tooltip). Every other
@@ -232,13 +244,7 @@ namespace AndroidSyncControl.UI
             try
             {
                 if (mainWVM.DeviceNameListSelected != null)
-                {
-                    string deviceid = mainWVM.DeviceNameListSelected.Name;
-                    DeviceView deviceView = new DeviceView(deviceid);
-                    mainWVM.DeviceViews.Add(deviceView);
-                    await deviceView.Start();
-                    deviceView.SliderChange(mainWVM.ViewPercent);
-                }
+                    await mainWVM.ShowInListAsync(mainWVM.DeviceNameListSelected.Name);
             }
             catch (Exception ex)
             {
@@ -271,16 +277,7 @@ namespace AndroidSyncControl.UI
             try
             {
                 Button button = sender as Button;
-                using (DeviceView deviceView = button.DataContext as DeviceView)
-                {
-                    // Null the bound ScrcpyUiView/Control BEFORE removing from the collection so the
-                    // binding propagates null to the ScrcpyControl synchronously (same as the main panel).
-                    // Otherwise Remove() freezes the binding, the control keeps the ScrcpyUiView, and the
-                    // next CompositionTarget.Rendering tick calls GetScreenSize() on the disposed scrcpy → crash.
-                    deviceView.DetachView();
-                    mainWVM.DeviceViews.Remove(deviceView);
-                    deviceView.Stop();
-                }
+                mainWVM.RemoveFromList(button.DataContext as DeviceView);
             }
             catch (Exception ex)
             {
@@ -292,14 +289,7 @@ namespace AndroidSyncControl.UI
         {
             try
             {
-                if (mainWVM?.DeviceView != null)
-                    using (var view = mainWVM.DeviceView)
-                    {
-                        mainWVM.DeviceView = null;
-                        view.Stop();
-                        parentMainGrid.Width = 0;
-                        mainGrid.Width = 0;
-                    }
+                RemoveMainDeviceView();
             }
             catch (Exception ex)
             {
@@ -307,17 +297,50 @@ namespace AndroidSyncControl.UI
             }
         }
 
+        private void RemoveMainDeviceView()
+        {
+            if (mainWVM?.DeviceView != null)
+                using (var view = mainWVM.DeviceView)
+                {
+                    mainWVM.DeviceView = null;
+                    view.Stop();
+                    parentMainGrid.Width = 0;
+                    mainGrid.Width = 0;
+                }
+        }
+
+        private void btn_mcpCopy_Click(object sender, RoutedEventArgs e)
+        {
+            string url = mainWVM.McpStatus.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                ? mainWVM.McpStatus
+                : null;
+            if (url == null)
+                return;
+            string config = JsonSerializer.Serialize(new Dictionary<string, object>
+            {
+                ["mcpServers"] = new Dictionary<string, object>
+                {
+                    ["android-sync-control"] = new Dictionary<string, object>
+                    {
+                        ["type"] = "http",
+                        ["url"] = url,
+                        ["headers"] = new Dictionary<string, string>
+                        {
+                            ["Authorization"] = "Bearer " + Singleton.Setting.Setting.McpToken,
+                        },
+                    },
+                },
+            }, new JsonSerializerOptions { WriteIndented = true });
+            try { Clipboard.SetText(config); }
+            catch (System.Runtime.InteropServices.COMException) { /* clipboard is locked by another process */ }
+        }
+
         private async void btn_showAllListView_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 foreach (var item in mainWVM.DeviceNameList.ToList())
-                {
-                    DeviceView deviceView = new DeviceView(item.Name);
-                    mainWVM.DeviceViews.Add(deviceView);
-                    await deviceView.Start();
-                    deviceView.SliderChange(mainWVM.ViewPercent);
-                }
+                    await mainWVM.ShowInListAsync(item.Name);
             }
             catch (Exception ex)
             {

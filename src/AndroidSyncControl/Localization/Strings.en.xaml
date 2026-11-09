@@ -29,6 +29,11 @@
     <sys:String x:Key="Str.Tip.MaxSize">Limit the video's longest edge (px, multiple of 8). Below 360 = unlimited (native size). Applied on reconnect.</sys:String>
     <sys:String x:Key="Str.Tip.Gpu">On: GPU decoding (D3D11VA). Off: CPU (none). Applied on reconnect.</sys:String>
     <sys:String x:Key="Str.Tip.Audio">On: receive and decode the device's audio stream. Applied on reconnect.</sys:String>
+    <sys:String x:Key="Str.Toolbar.Mcp">MCP server</sys:String>
+    <sys:String x:Key="Str.Tip.Mcp">On: let AI agents on this PC scan, view and control devices and run any adb command on them. Only accepts local connections with the access token.</sys:String>
+    <sys:String x:Key="Str.Tip.McpPort">Local port of the MCP server.</sys:String>
+    <sys:String x:Key="Str.Btn.McpCopy">Copy config</sys:String>
+    <sys:String x:Key="Str.Tip.McpCopy">Copy the MCP client configuration, which includes the access token.</sys:String>
 
     <!-- ================= Device panels ================= -->
     <sys:String x:Key="Str.Btn.Disconnect">Disconnect</sys:String>
