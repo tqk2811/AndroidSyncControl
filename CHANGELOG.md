@@ -8,6 +8,7 @@ message.
 
 ## [Unreleased]
 
+- *(style)* **(ui)** Put the mcp button first in the title bar group
 - *(feat)* **(ui)** Move mcp settings into their own window
 - *(ci)* Build each release from its git tag
 - *(docs)* Describe the mcp server

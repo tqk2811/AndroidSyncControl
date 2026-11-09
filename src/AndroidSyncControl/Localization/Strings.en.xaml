@@ -33,6 +33,9 @@
     <sys:String x:Key="Str.Tip.McpOpen">Open the MCP server settings.</sys:String>
     <sys:String x:Key="Str.Mcp.Title">MCP server</sys:String>
     <sys:String x:Key="Str.Mcp.Enable">Enable MCP server</sys:String>
+    <sys:String x:Key="Str.Mcp.Host">Host</sys:String>
+    <sys:String x:Key="Str.Tip.McpHost">IP address the server listens on. 127.0.0.1 and ::1 stay on this PC, 0.0.0.0 is every IPv4 address, :: is every IPv4 and IPv6 address.</sys:String>
+    <sys:String x:Key="Str.Mcp.ExposedWarning">Other machines on the network can reach this server. Traffic, including the access token, is not encrypted, and anyone with the token can also read and write files on this PC through adb push and pull. Windows Firewall may need to allow the port. Use it only on a network you trust.</sys:String>
     <sys:String x:Key="Str.Mcp.Port">Port</sys:String>
     <sys:String x:Key="Str.Mcp.Status">Address</sys:String>
     <sys:String x:Key="Str.Mcp.Token">Access token</sys:String>
@@ -40,8 +43,8 @@
     <sys:String x:Key="Str.Btn.McpNewToken">New token</sys:String>
     <sys:String x:Key="Str.Tip.McpNewToken">Replace the access token. The current token stops working.</sys:String>
     <sys:String x:Key="Str.Btn.Close">Close</sys:String>
-    <sys:String x:Key="Str.Tip.Mcp">On: let AI agents on this PC scan, view and control devices and run any adb command on them. Only accepts local connections with the access token.</sys:String>
-    <sys:String x:Key="Str.Tip.McpPort">Local port of the MCP server.</sys:String>
+    <sys:String x:Key="Str.Tip.Mcp">On: let AI agents scan, view and control devices and run any adb command on them. Every request needs the access token.</sys:String>
+    <sys:String x:Key="Str.Tip.McpPort">Port of the MCP server.</sys:String>
     <sys:String x:Key="Str.Btn.McpCopy">Copy config</sys:String>
     <sys:String x:Key="Str.Tip.McpCopy">Copy the MCP client configuration, which includes the access token.</sys:String>
 

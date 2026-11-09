@@ -80,7 +80,12 @@ Tải bản mới nhất tại trang [**Releases**](https://github.com/tqk2811/A
 
 Bấm **MCP** trên thanh tiêu đề, tích **Bật MCP server**, bấm **Chép cấu hình** rồi dán vào MCP
 client. **Đổi token** thay token truy cập. Server dùng Streamable HTTP tại
-`http://127.0.0.1:<cổng>/mcp` và bắt buộc có bearer token.
+`http://<host>:<cổng>/mcp` và bắt buộc có bearer token.
+
+**Host** chọn địa chỉ IP để lắng nghe. Mặc định `127.0.0.1` (hoặc `::1`) giữ server trong máy này.
+Địa chỉ LAN, `0.0.0.0` (mọi IPv4) hoặc `::` (mọi IPv4 và IPv6) cho phép máy khác kết nối. Các máy đó
+phải dùng địa chỉ IP, không dùng tên máy. Dữ liệu và token không được mã hoá, và ai có token còn đọc,
+ghi được file trên máy này qua `adb push` và `pull`, nên chỉ mở trong mạng bạn tin cậy.
 
 | Tool | Chức năng |
 |------|-----------|

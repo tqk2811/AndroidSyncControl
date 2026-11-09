@@ -1,8 +1,11 @@
 #nullable enable
 using AndroidSyncControl.Localization;
+using AndroidSyncControl.Mcp.Helpers;
 using AndroidSyncControl.UI.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Windows;
@@ -20,7 +23,21 @@ public partial class McpSettingsWindow : Window
         _viewModel = viewModel;
         // The token field must not be blank before the server has been enabled once.
         _viewModel.EnsureMcpToken();
+        // Must be filled before the binding of SelectedItem is evaluated.
+        cbo_host.ItemsSource = BuildHostList();
         DataContext = viewModel;
+    }
+
+    List<string> BuildHostList()
+    {
+        List<string> hosts = new List<string> { IPAddress.Loopback.ToString(), IPAddress.IPv6Loopback.ToString() };
+        hosts.AddRange(NetworkAddressHelper.GetLanAddresses().Select(x => x.ToString()));
+        hosts.Add(IPAddress.Any.ToString());
+        hosts.Add(IPAddress.IPv6Any.ToString());
+        // A saved LAN address may be gone after the network changed.
+        if (!hosts.Contains(_viewModel.McpHost))
+            hosts.Add(_viewModel.McpHost);
+        return hosts;
     }
 
     private void btn_copy_Click(object sender, RoutedEventArgs e)

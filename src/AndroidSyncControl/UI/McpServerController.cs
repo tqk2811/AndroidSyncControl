@@ -39,6 +39,7 @@ internal sealed class McpServerController
 
             McpHostOptions options = new McpHostOptions
             {
+                BindAddress = _viewModel.McpBindAddress,
                 Port = _viewModel.McpPort,
                 AccessToken = _viewModel.EnsureMcpToken(),
             };

@@ -11,6 +11,7 @@
         Foreground="{DynamicResource Brush.Text.Primary}"
         TextOptions.TextFormattingMode="Display">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
         <Style x:Key="ReadOnlyField" TargetType="TextBox">
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="Padding" Value="4,3"/>
@@ -38,26 +39,36 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <CheckBox Grid.ColumnSpan="2" Content="{DynamicResource Str.Mcp.Enable}" IsChecked="{Binding McpEnabled}"/>
         <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,6,0,12" TextWrapping="Wrap"
                    Text="{DynamicResource Str.Tip.Mcp}" Foreground="{DynamicResource Brush.Text.Secondary}"/>
 
-        <TextBlock Grid.Row="2" Text="{DynamicResource Str.Mcp.Port}" Style="{StaticResource FieldLabel}"/>
-        <ctrl:NumericUpDown Grid.Row="2" Grid.Column="1" Width="90" HorizontalAlignment="Left" Margin="0,0,0,8"
+        <TextBlock Grid.Row="2" Text="{DynamicResource Str.Mcp.Host}" Style="{StaticResource FieldLabel}"/>
+        <ComboBox x:Name="cbo_host" Grid.Row="2" Grid.Column="1" Margin="0,0,0,8"
+                  SelectedItem="{Binding McpHost}" ToolTip="{DynamicResource Str.Tip.McpHost}"/>
+
+        <TextBlock Grid.Row="3" Text="{DynamicResource Str.Mcp.Port}" Style="{StaticResource FieldLabel}"/>
+        <ctrl:NumericUpDown Grid.Row="3" Grid.Column="1" Width="90" HorizontalAlignment="Left" Margin="0,0,0,8"
                             Minimum="1024" Maximum="65535" Value="{Binding McpPort}" Increment="1"
                             ToolTip="{DynamicResource Str.Tip.McpPort}"/>
 
-        <TextBlock Grid.Row="3" Text="{DynamicResource Str.Mcp.Status}" Style="{StaticResource FieldLabel}"/>
-        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,8" Style="{StaticResource ReadOnlyField}"
+        <TextBlock Grid.Row="4" Text="{DynamicResource Str.Mcp.Status}" Style="{StaticResource FieldLabel}"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,8" Style="{StaticResource ReadOnlyField}"
                  Text="{Binding McpStatus, Mode=OneWay}"/>
 
-        <TextBlock Grid.Row="4" Text="{DynamicResource Str.Mcp.Token}" Style="{StaticResource FieldLabel}"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Margin="0,0,0,16" Style="{StaticResource ReadOnlyField}"
+        <TextBlock Grid.Row="5" Text="{DynamicResource Str.Mcp.Token}" Style="{StaticResource FieldLabel}"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,8" Style="{StaticResource ReadOnlyField}"
                  Text="{Binding McpToken, Mode=OneWay}"/>
 
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock Grid.Row="6" Grid.ColumnSpan="2" Margin="0,0,0,8" TextWrapping="Wrap" FontWeight="SemiBold"
+                   Text="{DynamicResource Str.Mcp.ExposedWarning}"
+                   Visibility="{Binding McpIsExposed, Converter={StaticResource BoolToVisibility}}"/>
+
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="0,8,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="{DynamicResource Str.Btn.McpCopy}" Style="{StaticResource AccentButton}" Click="btn_copy_Click"
                     IsEnabled="{Binding McpEnabled}" ToolTip="{DynamicResource Str.Tip.McpCopy}" Margin="0,0,8,0"/>
             <Button Content="{DynamicResource Str.Btn.McpNewToken}" Click="btn_newToken_Click"

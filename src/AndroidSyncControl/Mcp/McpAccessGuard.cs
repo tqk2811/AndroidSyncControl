@@ -11,6 +11,8 @@ namespace AndroidSyncControl.Mcp;
 /// <summary>
 /// Middleware protecting the endpoint, which can run any command on the attached devices.
 /// Host and Origin stop web pages reaching it through DNS rebinding; the token stops everything else.
+/// A rebinding page always arrives under a domain name, so a server open to the network can accept
+/// any IP literal as Host and still reject it.
 /// </summary>
 public sealed class McpAccessGuard
 {
@@ -18,8 +20,11 @@ public sealed class McpAccessGuard
 
     readonly byte[] _expectedToken;
 
-    public McpAccessGuard(string accessToken)
+    readonly bool _allowRemoteHosts;
+
+    public McpAccessGuard(string accessToken, bool allowRemoteHosts = false)
     {
+        _allowRemoteHosts = allowRemoteHosts;
         if (string.IsNullOrWhiteSpace(accessToken))
             throw new ArgumentException("An access token is required.", nameof(accessToken));
         _expectedToken = Encoding.UTF8.GetBytes(accessToken);
@@ -27,7 +32,7 @@ public sealed class McpAccessGuard
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        if (!IsLoopbackHost(context.Request.Host.Host) || !IsAllowedOrigin(context.Request.Headers.Origin.ToString()))
+        if (!IsAllowedHost(context.Request.Host.Host) || !IsAllowedOrigin(context.Request.Headers.Origin.ToString()))
         {
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             return;
@@ -48,6 +53,9 @@ public sealed class McpAccessGuard
         byte[] actual = Encoding.UTF8.GetBytes(authorization.Substring(BearerPrefix.Length).Trim());
         return CryptographicOperations.FixedTimeEquals(actual, _expectedToken);
     }
+
+    bool IsAllowedHost(string host)
+        => IsLoopbackHost(host) || (_allowRemoteHosts && IPAddress.TryParse(host, out _));
 
     static bool IsAllowedOrigin(string origin)
     {

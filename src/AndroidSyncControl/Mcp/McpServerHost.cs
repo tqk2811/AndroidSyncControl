@@ -1,4 +1,5 @@
 #nullable enable
+using AndroidSyncControl.Mcp.Helpers;
 using AndroidSyncControl.Mcp.Interfaces;
 using AndroidSyncControl.Mcp.Models;
 using AndroidSyncControl.Mcp.Tools;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 namespace AndroidSyncControl.Mcp;
 
 /// <summary>
-/// Runs the HTTP MCP endpoint on the loopback interface.
+/// Runs the HTTP MCP endpoint on the address chosen in <see cref="McpHostOptions"/>.
 /// <see cref="IDeviceHost"/> and <see cref="IAdbCommandRunner"/> are borrowed and never disposed here.
 /// Not thread-safe: callers serialize Start and Stop.
 /// </summary>
@@ -42,14 +43,14 @@ public sealed class McpServerHost : IAsyncDisposable
         if (_app is not null)
             throw new InvalidOperationException("The MCP server is already running.");
 
-        McpAccessGuard guard = new McpAccessGuard(options.AccessToken);
+        McpAccessGuard guard = new McpAccessGuard(options.AccessToken, allowRemoteHosts: !IPAddress.IsLoopback(options.BindAddress));
 
         WebApplicationBuilder builder = WebApplication.CreateSlimBuilder(new WebApplicationOptions
         {
             ContentRootPath = AppContext.BaseDirectory,
         });
         builder.Logging.ClearProviders();
-        builder.WebHost.ConfigureKestrel(kestrel => kestrel.Listen(IPAddress.Loopback, options.Port));
+        builder.WebHost.ConfigureKestrel(kestrel => kestrel.Listen(options.BindAddress, options.Port));
 
         builder.Services.AddSingleton(_deviceHost);
         builder.Services.AddSingleton(_adbCommandRunner);
@@ -70,6 +71,10 @@ public sealed class McpServerHost : IAsyncDisposable
         try
         {
             await app.StartAsync(cancellationToken).ConfigureAwait(false);
+            // Inside the try: a failure here must not leave a server listening with no address shown.
+            int port = new Uri(app.Urls.First()).Port;
+            IPAddress clientAddress = NetworkAddressHelper.GetClientAddress(options.BindAddress, NetworkAddressHelper.GetLanAddresses());
+            EndpointUrl = $"http://{new IPEndPoint(clientAddress, port)}{EndpointPath}";
         }
         catch
         {
@@ -77,7 +82,6 @@ public sealed class McpServerHost : IAsyncDisposable
             throw;
         }
         _app = app;
-        EndpointUrl = app.Urls.First().TrimEnd('/') + EndpointPath;
     }
 
     public async Task StopAsync()

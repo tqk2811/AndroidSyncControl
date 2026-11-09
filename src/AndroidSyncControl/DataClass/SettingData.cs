@@ -17,6 +17,9 @@ namespace AndroidSyncControl.DataClass
 
         /// <summary>Off by default: the MCP server can run any adb command on the attached devices.</summary>
         public bool McpEnabled { get; set; } = false;
+
+        /// <summary>IP address the MCP server listens on. Loopback by default so it stays private to this PC.</summary>
+        public string McpHost { get; set; } = "127.0.0.1";
         public int McpPort { get; set; } = 8765;
 
         /// <summary>Bearer token of the MCP server, generated the first time it starts.</summary>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TqkLibrary.WpfUi;
 using TqkLibrary.Scrcpy.Wpf;
 using System.Collections.ObjectModel;
+using System.Net;
 using System.Security.Cryptography;
 
 namespace AndroidSyncControl.UI.ViewModels
@@ -71,6 +72,34 @@ namespace AndroidSyncControl.UI.ViewModels
                 NotifyPropertyChange();
                 Singleton.Setting.Save();
                 McpConfigurationChanged?.Invoke();
+            }
+        }
+
+        /// <summary>A hand-edited setting that is not an IP falls back to loopback, the private choice.</summary>
+        public IPAddress McpBindAddress
+        {
+            get { return IPAddress.TryParse(Singleton.Setting.Setting.McpHost, out IPAddress address) ? address : IPAddress.Loopback; }
+        }
+
+        public bool McpIsExposed
+        {
+            get { return !IPAddress.IsLoopback(McpBindAddress); }
+        }
+
+        public string McpHost
+        {
+            get { return McpBindAddress.ToString(); }
+            set
+            {
+                // The ComboBox writes back null or the same value while it is being populated.
+                if (string.IsNullOrEmpty(value) || value == McpHost)
+                    return;
+                Singleton.Setting.Setting.McpHost = value;
+                NotifyPropertyChange();
+                NotifyPropertyChange(nameof(McpIsExposed));
+                Singleton.Setting.Save();
+                if (McpEnabled)
+                    McpConfigurationChanged?.Invoke();
             }
         }
 

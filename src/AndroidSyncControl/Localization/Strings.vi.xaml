@@ -33,6 +33,9 @@
     <sys:String x:Key="Str.Tip.McpOpen">Mở cài đặt MCP server.</sys:String>
     <sys:String x:Key="Str.Mcp.Title">MCP server</sys:String>
     <sys:String x:Key="Str.Mcp.Enable">Bật MCP server</sys:String>
+    <sys:String x:Key="Str.Mcp.Host">Host</sys:String>
+    <sys:String x:Key="Str.Tip.McpHost">Địa chỉ IP mà server lắng nghe. 127.0.0.1 và ::1 chỉ trong máy này, 0.0.0.0 là mọi địa chỉ IPv4, :: là mọi địa chỉ IPv4 và IPv6.</sys:String>
+    <sys:String x:Key="Str.Mcp.ExposedWarning">Các máy khác trong mạng có thể kết nối tới server này. Dữ liệu truyền đi, gồm cả token truy cập, không được mã hoá, và ai có token còn đọc, ghi được file trên máy này qua adb push và pull. Có thể phải mở cổng trên Windows Firewall. Chỉ dùng trong mạng bạn tin cậy.</sys:String>
     <sys:String x:Key="Str.Mcp.Port">Cổng</sys:String>
     <sys:String x:Key="Str.Mcp.Status">Địa chỉ</sys:String>
     <sys:String x:Key="Str.Mcp.Token">Token truy cập</sys:String>
@@ -40,8 +43,8 @@
     <sys:String x:Key="Str.Btn.McpNewToken">Đổi token</sys:String>
     <sys:String x:Key="Str.Tip.McpNewToken">Thay token truy cập. Token hiện tại sẽ hết hiệu lực.</sys:String>
     <sys:String x:Key="Str.Btn.Close">Đóng</sys:String>
-    <sys:String x:Key="Str.Tip.Mcp">Bật: cho phép agent AI trên máy này quét, xem, điều khiển thiết bị và chạy mọi lệnh adb trên thiết bị. Chỉ nhận kết nối cục bộ có token truy cập.</sys:String>
-    <sys:String x:Key="Str.Tip.McpPort">Cổng cục bộ của MCP server.</sys:String>
+    <sys:String x:Key="Str.Tip.Mcp">Bật: cho phép agent AI quét, xem, điều khiển thiết bị và chạy mọi lệnh adb trên thiết bị. Mọi yêu cầu đều phải có token truy cập.</sys:String>
+    <sys:String x:Key="Str.Tip.McpPort">Cổng của MCP server.</sys:String>
     <sys:String x:Key="Str.Btn.McpCopy">Chép cấu hình</sys:String>
     <sys:String x:Key="Str.Tip.McpCopy">Chép cấu hình cho MCP client, trong đó có token truy cập.</sys:String>
 

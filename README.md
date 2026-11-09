@@ -79,7 +79,13 @@ page (`AndroidSyncControl-<version>-net8.0-windows.zip`). No installation requir
 ### MCP server
 
 Click **MCP** on the title bar, tick **Enable MCP server**, click **Copy config**, and paste the
-result into your MCP client. **New token** replaces the access token. The server uses Streamable HTTP at `http://127.0.0.1:<port>/mcp` and requires the bearer token.
+result into your MCP client. **New token** replaces the access token. The server uses Streamable HTTP at `http://<host>:<port>/mcp` and requires the bearer token.
+
+**Host** selects the IP address to listen on. The default `127.0.0.1` (or `::1`) keeps the server on
+this PC. A LAN address, `0.0.0.0` (all IPv4) or `::` (all IPv4 and IPv6) lets other machines connect.
+Those clients must use the IP address, not a host name. The traffic and the token are not encrypted,
+and anyone with the token can read and write files on this PC through `adb push` and `pull`, so open
+it only on a network you trust.
 
 | Tool | What it does |
 |------|--------------|
