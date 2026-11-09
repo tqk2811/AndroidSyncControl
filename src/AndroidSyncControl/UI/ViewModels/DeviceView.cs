@@ -14,10 +14,11 @@ using TqkLibrary.Scrcpy.Interfaces;
 using TqkLibrary.Scrcpy.Enums;
 using TqkLibrary.Scrcpy.Configs;
 using TqkLibrary.AudioPlayer.XAudio2;
+using AndroidSyncControl.Mcp.Interfaces;
 
 namespace AndroidSyncControl.UI.ViewModels
 {
-    class DeviceView : BaseViewModel, IDisposable
+    class DeviceView : BaseViewModel, IDisposable, IDeviceSession
     {
         readonly Scrcpy scrcpy;
         readonly Adb adb;
@@ -122,6 +123,15 @@ namespace AndroidSyncControl.UI.ViewModels
         }
         public IControl RawControl { get { return scrcpy.Control; } }
 
+        volatile bool _isStarting;
+        /// <summary>True while scrcpy.Connect runs; it can block, and Dispose would wait for it.</summary>
+        public bool IsStarting { get { return _isStarting; } }
+
+        public bool IsConnected { get { return scrcpy.IsConnected; } }
+        System.Drawing.Size IDeviceSession.ScreenSize { get { return scrcpy.ScreenSize; } }
+        IControl IDeviceSession.InputControl { get { return RawControl; } }
+        System.Drawing.Bitmap IDeviceSession.CaptureScreen() => scrcpy.GetScreenShot();
+
         /// <summary>
         /// Ngắt tham chiếu mà WPF ScrcpyControl đang bind (ScrcpyUiView, Control) TRƯỚC khi scrcpy bị dispose.
         /// Handler CompositionTarget.Rendering của control đọc <c>ScrcpyUiView?.Scrcpy.ScreenSize</c> mỗi frame;
@@ -222,11 +232,14 @@ namespace AndroidSyncControl.UI.ViewModels
 
         public Task<bool> Start()
         {
+            _isStarting = true;
             return Task.Factory.StartNew(() =>
             {
 #if DEBUG
                 Debug.WriteLine($"scrcpy.Connect");
 #endif
+                try
+                {
                 if (scrcpy.Connect(new ScrcpyConfig()
                 {
                     ClientConfig = new ClientConfig()
@@ -279,6 +292,11 @@ namespace AndroidSyncControl.UI.ViewModels
                 else
                 {
                     return false;
+                }
+                }
+                finally
+                {
+                    _isStarting = false;
                 }
             }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }

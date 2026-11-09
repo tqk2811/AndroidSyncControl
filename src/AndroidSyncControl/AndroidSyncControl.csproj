@@ -16,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="ModelContextProtocol.AspNetCore" Version="2.3.0" />
 		<PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
 		<PackageReference Include="TqkLibrary.Adb.Runtimes" Version="33.0.2.2" />
 		<PackageReference Include="TqkLibrary.AdbDotNet" Version="1.0.36" />
