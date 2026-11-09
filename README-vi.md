@@ -30,6 +30,8 @@ Xây dựng dựa trên [scrcpy](https://github.com/Genymobile/scrcpy).
   rồi kết nối lại — không cần thao tác thủ công.
 - **Giao diện Sáng / Tối** — Ba chế độ: theo hệ thống, Sáng hoặc Tối. Giữ màn hình thiết bị luôn
   sáng và hiển thị điểm chạm.
+- **MCP server cho agent AI** — Cho agent quét thiết bị, chạy lệnh adb, chụp màn hình và điều
+  khiển các máy đã mở. Mặc định tắt.
 
 ## Hình ảnh
 
@@ -73,6 +75,26 @@ Tải bản mới nhất tại trang [**Releases**](https://github.com/tqk2811/A
 | **Đồng bộ** | Gửi thao tác của máy chính tới tất cả thiết bị còn lại (chỉ ở khung chính). |
 | **Loa** | Phát âm thanh của thiết bị đó ra loa PC (theo từng máy). |
 | **Ngắt** | Ngắt kết nối thiết bị đó. |
+| **MCP server** | Bật MCP server cục bộ. **Chép cấu hình** chép cấu hình cho client, trong đó có token truy cập. |
+
+### MCP server
+
+Tích **MCP server**, bấm **Chép cấu hình** rồi dán vào MCP client. Server dùng Streamable HTTP tại
+`http://127.0.0.1:<cổng>/mcp` và bắt buộc có bearer token.
+
+| Tool | Chức năng |
+|------|-----------|
+| `device_list` | Quét thiết bị và cho biết máy nào đã connect. |
+| `device_connect`, `device_disconnect` | Mở hoặc đóng phiên scrcpy. Thiết bị hiện trên cửa sổ app. |
+| `adb_execute` | Chạy lệnh adb trên một thiết bị. |
+| `screenshot` | Chụp màn hình thiết bị đã connect. |
+| `tap`, `long_press`, `swipe`, `scroll` | Thao tác chạm trên thiết bị đã connect. |
+| `key`, `text`, `start_app` | Phím, nhập chữ và mở app trên thiết bị đã connect. |
+
+> **Bảo mật:** client có token sẽ toàn quyền với mọi thiết bị đang cắm, kể cả chạy lệnh adb shell
+> bất kỳ, và các lệnh adb `push`/`pull`/`install` có thể đọc hoặc ghi file trên máy tính này. Server
+> chỉ nhận kết nối từ chính máy này. Token lưu dạng văn bản thuần trong `setting.json`,
+> hãy giữ riêng file này.
 
 ## Build từ mã nguồn
 

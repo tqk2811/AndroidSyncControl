@@ -7,6 +7,14 @@ A **timeline read bottom-to-top**: each `## [M.m.0]` is the tag that opened a mi
 commits stacked ABOVE it are that line's successive versions `M.m.1`, `M.m.2`, ... (patch number =
 commits since the tag), newest on top. Each line shows its version, conventional type, and message.
 
+- 1.0.16 *(ci)* Publish the app as self-contained
+- 1.0.15 *(feat)* **(ui)** Host the mcp server in the main window
+- 1.0.14 *(test)* **(mcp)** Cover the mcp endpoint and its helpers
+- 1.0.13 *(feat)* **(mcp)** Add http mcp server with device, adb and scrcpy tools
+- 1.0.12 *(refactor)* Move application code into src
+- 1.0.11 *(docs)* Relicense from GPLv3 to MIT
+- 1.0.10 *(feat)* Upgrade scrcpy to 4.1.6, adb and audio libraries
+- 1.0.9 *(ci)* Number release notes per build like TqkLibrary.Scrcpy [release_notes_only]
 - 1.0.8 *(feat)* Update scrcpy to 4.0.101 [release]
 - 1.0.7 *(docs)* Update README Size slider range to 1-150%
 - 1.0.6 *(feat)* Auto-size toolbar buttons and raise view slider to 150%

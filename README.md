@@ -30,6 +30,8 @@ Built on top of [scrcpy](https://github.com/Genymobile/scrcpy).
   reconnects automatically — no manual steps.
 - **Light / Dark theme** — Three modes: follow system, Light, or Dark. Keeps the device
   screen awake and shows touches.
+- **MCP server for AI agents** — Let an agent scan devices, run adb commands, take screenshots
+  and control the phones it opens. Off by default.
 
 ## Screenshots
 
@@ -73,6 +75,26 @@ page (`AndroidSyncControl-<version>-net8.0-windows.zip`). No installation requir
 | **Sync** | Forward the main device's input to all other devices (main panel only). |
 | **Speaker** | Play that device's audio through the PC speakers (per device). |
 | **Disconnect** | Disconnect that device. |
+| **MCP server** | Start the local MCP server. **Copy config** copies the client configuration, including the access token. |
+
+### MCP server
+
+Tick **MCP server**, click **Copy config**, and paste the result into your MCP client. The server
+uses Streamable HTTP at `http://127.0.0.1:<port>/mcp` and requires the bearer token.
+
+| Tool | What it does |
+|------|--------------|
+| `device_list` | Scan devices and report which ones are connected. |
+| `device_connect`, `device_disconnect` | Open or close a scrcpy session. The device appears in the app window. |
+| `adb_execute` | Run an adb command on one device. |
+| `screenshot` | Capture the screen of a connected device. |
+| `tap`, `long_press`, `swipe`, `scroll` | Touch input on a connected device. |
+| `key`, `text`, `start_app` | Keys, typing and launching apps on a connected device. |
+
+> **Security:** a client with the token has full control of every attached device, including any
+> adb shell command, and adb `push`/`pull`/`install` can read or write files on this PC. The server
+> only accepts connections from this PC. The token is stored in
+> plain text in `setting.json`, so keep that file private.
 
 ## Build from source
 
