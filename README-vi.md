@@ -75,11 +75,11 @@ Tải bản mới nhất tại trang [**Releases**](https://github.com/tqk2811/A
 | **Đồng bộ** | Gửi thao tác của máy chính tới tất cả thiết bị còn lại (chỉ ở khung chính). |
 | **Loa** | Phát âm thanh của thiết bị đó ra loa PC (theo từng máy). |
 | **Ngắt** | Ngắt kết nối thiết bị đó. |
-| **MCP server** | Bật MCP server cục bộ. **Chép cấu hình** chép cấu hình cho client, trong đó có token truy cập. |
 
 ### MCP server
 
-Tích **MCP server**, bấm **Chép cấu hình** rồi dán vào MCP client. Server dùng Streamable HTTP tại
+Bấm **MCP** trên thanh tiêu đề, tích **Bật MCP server**, bấm **Chép cấu hình** rồi dán vào MCP
+client. **Đổi token** thay token truy cập. Server dùng Streamable HTTP tại
 `http://127.0.0.1:<cổng>/mcp` và bắt buộc có bearer token.
 
 | Tool | Chức năng |

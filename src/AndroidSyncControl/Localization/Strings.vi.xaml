@@ -29,7 +29,17 @@
     <sys:String x:Key="Str.Tip.MaxSize">Giới hạn cạnh dài nhất của video (px, bội số 8). Dưới 360 = không giới hạn (kích thước gốc). Áp dụng khi kết nối lại.</sys:String>
     <sys:String x:Key="Str.Tip.Gpu">Bật: dùng GPU giải mã (D3D11VA). Tắt: dùng CPU (none). Áp dụng khi kết nối lại.</sys:String>
     <sys:String x:Key="Str.Tip.Audio">Bật: nhận và giải mã luồng âm thanh từ thiết bị. Áp dụng khi kết nối lại.</sys:String>
-    <sys:String x:Key="Str.Toolbar.Mcp">MCP server</sys:String>
+    <sys:String x:Key="Str.Toolbar.Mcp">MCP</sys:String>
+    <sys:String x:Key="Str.Tip.McpOpen">Mở cài đặt MCP server.</sys:String>
+    <sys:String x:Key="Str.Mcp.Title">MCP server</sys:String>
+    <sys:String x:Key="Str.Mcp.Enable">Bật MCP server</sys:String>
+    <sys:String x:Key="Str.Mcp.Port">Cổng</sys:String>
+    <sys:String x:Key="Str.Mcp.Status">Địa chỉ</sys:String>
+    <sys:String x:Key="Str.Mcp.Token">Token truy cập</sys:String>
+    <sys:String x:Key="Str.Mcp.NewTokenConfirm">Tạo token truy cập mới? Các MCP client đang dùng token hiện tại sẽ ngừng hoạt động cho tới khi bạn cập nhật cấu hình.</sys:String>
+    <sys:String x:Key="Str.Btn.McpNewToken">Đổi token</sys:String>
+    <sys:String x:Key="Str.Tip.McpNewToken">Thay token truy cập. Token hiện tại sẽ hết hiệu lực.</sys:String>
+    <sys:String x:Key="Str.Btn.Close">Đóng</sys:String>
     <sys:String x:Key="Str.Tip.Mcp">Bật: cho phép agent AI trên máy này quét, xem, điều khiển thiết bị và chạy mọi lệnh adb trên thiết bị. Chỉ nhận kết nối cục bộ có token truy cập.</sys:String>
     <sys:String x:Key="Str.Tip.McpPort">Cổng cục bộ của MCP server.</sys:String>
     <sys:String x:Key="Str.Btn.McpCopy">Chép cấu hình</sys:String>

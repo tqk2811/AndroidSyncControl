@@ -3,7 +3,6 @@ using AndroidSyncControl.Mcp;
 using AndroidSyncControl.Mcp.Models;
 using AndroidSyncControl.UI.ViewModels;
 using System;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,8 +14,6 @@ namespace AndroidSyncControl.UI;
 /// </summary>
 internal sealed class McpServerController
 {
-    const int TokenBytes = 32;
-
     readonly MainWVM _viewModel;
     readonly McpServerHost _host;
 
@@ -43,7 +40,7 @@ internal sealed class McpServerController
             McpHostOptions options = new McpHostOptions
             {
                 Port = _viewModel.McpPort,
-                AccessToken = EnsureAccessToken(),
+                AccessToken = _viewModel.EnsureMcpToken(),
             };
             // Building the ASP.NET host is slow enough to freeze the window.
             await Task.Run(() => _host.StartAsync(options));
@@ -74,15 +71,5 @@ internal sealed class McpServerController
     {
         try { await _host.StopAsync(); }
         catch (Exception) { }
-    }
-
-    static string EnsureAccessToken()
-    {
-        if (string.IsNullOrEmpty(Singleton.Setting.Setting.McpToken))
-        {
-            Singleton.Setting.Setting.McpToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(TokenBytes)).ToLowerInvariant();
-            Singleton.Setting.Save();
-        }
-        return Singleton.Setting.Setting.McpToken;
     }
 }

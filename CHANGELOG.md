@@ -8,6 +8,7 @@ message.
 
 ## [Unreleased]
 
+- *(ci)* Build each release from its git tag
 - *(docs)* Describe the mcp server
 - *(ci)* Publish the app as self-contained
 - *(feat)* **(ui)** Host the mcp server in the main window

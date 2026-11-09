@@ -20,7 +20,6 @@ using AndroidSyncControl.Themes;
 using AndroidSyncControl.Themes.Enums;
 using AndroidSyncControl.Localization;
 using TqkLibrary.Scrcpy;
-using System.Text.Json;
 using AndroidSyncControl.Mcp;
 
 namespace AndroidSyncControl.UI
@@ -309,30 +308,9 @@ namespace AndroidSyncControl.UI
                 }
         }
 
-        private void btn_mcpCopy_Click(object sender, RoutedEventArgs e)
+        private void btn_mcp_Click(object sender, RoutedEventArgs e)
         {
-            string url = mainWVM.McpStatus.StartsWith("http", StringComparison.OrdinalIgnoreCase)
-                ? mainWVM.McpStatus
-                : null;
-            if (url == null)
-                return;
-            string config = JsonSerializer.Serialize(new Dictionary<string, object>
-            {
-                ["mcpServers"] = new Dictionary<string, object>
-                {
-                    ["android-sync-control"] = new Dictionary<string, object>
-                    {
-                        ["type"] = "http",
-                        ["url"] = url,
-                        ["headers"] = new Dictionary<string, string>
-                        {
-                            ["Authorization"] = "Bearer " + Singleton.Setting.Setting.McpToken,
-                        },
-                    },
-                },
-            }, new JsonSerializerOptions { WriteIndented = true });
-            try { Clipboard.SetText(config); }
-            catch (System.Runtime.InteropServices.COMException) { /* clipboard is locked by another process */ }
+            new McpSettingsWindow(mainWVM) { Owner = this }.ShowDialog();
         }
 
         private async void btn_showAllListView_Click(object sender, RoutedEventArgs e)

@@ -65,6 +65,8 @@
                             VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{DynamicResource Str.Theme.System}">
                         <TextBlock x:Name="themeGlyph" FontFamily="Segoe MDL2 Assets" FontSize="15" Text="&#xE706;"/>
                     </Button>
+                    <Button Content="{DynamicResource Str.Toolbar.Mcp}" VerticalAlignment="Center" Margin="0,0,6,0"
+                            Click="btn_mcp_Click" ToolTip="{DynamicResource Str.Tip.McpOpen}"/>
                     <Button Content="{DynamicResource Str.Btn.About}" Style="{StaticResource PurpleButton}" VerticalAlignment="Center"
                             Margin="0,0,12,0" Click="btn_about_Click"/>
 
@@ -125,17 +127,6 @@
                               ToolTip="{DynamicResource Str.Tip.Gpu}"/>
                         <CheckBox Content="{DynamicResource Str.Toolbar.Audio}" VerticalAlignment="Center" IsChecked="{Binding IsAudio}"
                               ToolTip="{DynamicResource Str.Tip.Audio}"/>
-
-                        <Border Width="1" Margin="4,2" Background="{DynamicResource Brush.Surface.BorderBrush}"/>
-
-                        <CheckBox Content="{DynamicResource Str.Toolbar.Mcp}" VerticalAlignment="Center" IsChecked="{Binding McpEnabled}"
-                              ToolTip="{DynamicResource Str.Tip.Mcp}"/>
-                        <ctrl:NumericUpDown Width="78" Minimum="1024" Maximum="65535" Value="{Binding McpPort}" Increment="1"
-                              VerticalAlignment="Center" ToolTip="{DynamicResource Str.Tip.McpPort}"/>
-                        <Button Content="{DynamicResource Str.Btn.McpCopy}" Click="btn_mcpCopy_Click"
-                              IsEnabled="{Binding McpEnabled}" ToolTip="{DynamicResource Str.Tip.McpCopy}"/>
-                        <TextBlock Text="{Binding McpStatus}" VerticalAlignment="Center" MaxWidth="320" TextTrimming="CharacterEllipsis"
-                              ToolTip="{Binding McpStatus}" Foreground="{DynamicResource Brush.Text.Secondary}"/>
                     </st:StackPanel>
                 </ScrollViewer>
             </Border>

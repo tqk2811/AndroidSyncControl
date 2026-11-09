@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TqkLibrary.WpfUi;
 using TqkLibrary.Scrcpy.Wpf;
 using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 
 namespace AndroidSyncControl.UI.ViewModels
 {
@@ -56,6 +57,8 @@ namespace AndroidSyncControl.UI.ViewModels
             set { Singleton.Setting.Setting.IsAudio = value; NotifyPropertyChange(); Singleton.Setting.Save(); }
         }
 
+        const int McpTokenBytes = 32;
+
         /// <summary>Raised when the MCP server must be started, stopped or restarted.</summary>
         public event Action McpConfigurationChanged;
 
@@ -82,6 +85,34 @@ namespace AndroidSyncControl.UI.ViewModels
                 if (McpEnabled)
                     McpConfigurationChanged?.Invoke();
             }
+        }
+
+        public string McpToken
+        {
+            get { return Singleton.Setting.Setting.McpToken; }
+        }
+
+        /// <summary>Returns the access token, creating it the first time it is needed.</summary>
+        public string EnsureMcpToken()
+        {
+            if (string.IsNullOrEmpty(McpToken))
+                StoreNewMcpToken();
+            return McpToken;
+        }
+
+        /// <summary>Replaces the token and restarts a running server, which then rejects the old token.</summary>
+        public void RegenerateMcpToken()
+        {
+            StoreNewMcpToken();
+            if (McpEnabled)
+                McpConfigurationChanged?.Invoke();
+        }
+
+        void StoreNewMcpToken()
+        {
+            Singleton.Setting.Setting.McpToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(McpTokenBytes)).ToLowerInvariant();
+            NotifyPropertyChange(nameof(McpToken));
+            Singleton.Setting.Save();
         }
 
         string _McpStatus = string.Empty;

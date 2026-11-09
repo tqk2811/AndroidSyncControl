@@ -75,12 +75,11 @@ page (`AndroidSyncControl-<version>-net8.0-windows.zip`). No installation requir
 | **Sync** | Forward the main device's input to all other devices (main panel only). |
 | **Speaker** | Play that device's audio through the PC speakers (per device). |
 | **Disconnect** | Disconnect that device. |
-| **MCP server** | Start the local MCP server. **Copy config** copies the client configuration, including the access token. |
 
 ### MCP server
 
-Tick **MCP server**, click **Copy config**, and paste the result into your MCP client. The server
-uses Streamable HTTP at `http://127.0.0.1:<port>/mcp` and requires the bearer token.
+Click **MCP** on the title bar, tick **Enable MCP server**, click **Copy config**, and paste the
+result into your MCP client. **New token** replaces the access token. The server uses Streamable HTTP at `http://127.0.0.1:<port>/mcp` and requires the bearer token.
 
 | Tool | What it does |
 |------|--------------|
