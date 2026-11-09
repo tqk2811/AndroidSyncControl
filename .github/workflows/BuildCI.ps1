@@ -1,4 +1,4 @@
-# CI build script: dotnet publish the WPF app (framework-dependent, win-x64) and zip it.
+# CI build script: dotnet publish the WPF app (self-contained, win-x64) and zip it.
 # NO nuget/native. release.yml handles the GitHub Release create/upload + notes.
 # Resolves the repo root from this script's location so it can be invoked from anywhere.
 # Output: publish\AndroidSyncControl-<version>-<TargetFramework>.zip
@@ -47,9 +47,11 @@ Remove-Item -Recurse -Force $publishDir -ErrorAction SilentlyContinue
 $appDir = Join-Path $publishDir 'AndroidSyncControl'
 New-Item -ItemType Directory -Force -Path $appDir | Out-Null
 
-# Publish framework-dependent, win-x64 (native assets: adb, XAudio2, scrcpy flatten correctly).
+# Publish self-contained, win-x64 (native assets: adb, XAudio2, scrcpy flatten correctly).
+# Self-contained because the embedded MCP server needs ASP.NET Core: a framework-dependent app
+# would refuse to start on machines without that runtime, even with the server turned off.
 # GitVersion.MsBuild (Directory.Build.targets, Release) stamps the same version into the assembly.
-dotnet publish $proj -c Release -r win-x64 --self-contained false -o $appDir
+dotnet publish $proj -c Release -r win-x64 --self-contained true -o $appDir
 if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 
 # Ship the license notices next to the binaries (MIT requires the notice to travel with every

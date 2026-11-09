@@ -62,6 +62,21 @@ vorbis, dav1d, libvpx and others). Their configuration and notices live in the
 - Copyright (c) .NET Foundation and Contributors
 - Shipped as: `System.Drawing.Common.dll`
 
+## .NET Runtime, ASP.NET Core and Windows Desktop Runtime
+
+- Project: https://github.com/dotnet
+- License: MIT
+- Copyright (c) .NET Foundation and Contributors
+- Shipped as: the .NET runtime files next to `AndroidSyncControl.exe` (self-contained publish).
+
+## ModelContextProtocol C# SDK
+
+- Project: https://github.com/modelcontextprotocol/csharp-sdk
+- License: Apache License 2.0 — [`licenses/Apache-2.0.txt`](licenses/Apache-2.0.txt)
+- Copyright (c) the Model Context Protocol contributors.
+- Shipped as: `ModelContextProtocol.dll`, `ModelContextProtocol.Core.dll`,
+  `ModelContextProtocol.AspNetCore.dll`
+
 ## TqkLibrary.*
 
 - Project: https://github.com/tqk2811
