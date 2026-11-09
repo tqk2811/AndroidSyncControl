@@ -59,14 +59,14 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Stretch"
                             shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Button Content="{DynamicResource Str.Toolbar.Mcp}" VerticalAlignment="Center" Margin="0,0,6,0"
+                            Click="btn_mcp_Click" ToolTip="{DynamicResource Str.Tip.McpOpen}"/>
                     <ComboBox x:Name="cbo_language" Width="120" VerticalAlignment="Center" Margin="0,0,6,0"
                               DisplayMemberPath="Display" SelectionChanged="cbo_language_SelectionChanged"/>
                     <Button x:Name="btn_theme" Style="{StaticResource IconButton}" Click="btn_theme_Click"
                             VerticalAlignment="Center" Margin="0,0,6,0" ToolTip="{DynamicResource Str.Theme.System}">
                         <TextBlock x:Name="themeGlyph" FontFamily="Segoe MDL2 Assets" FontSize="15" Text="&#xE706;"/>
                     </Button>
-                    <Button Content="{DynamicResource Str.Toolbar.Mcp}" VerticalAlignment="Center" Margin="0,0,6,0"
-                            Click="btn_mcp_Click" ToolTip="{DynamicResource Str.Tip.McpOpen}"/>
                     <Button Content="{DynamicResource Str.Btn.About}" Style="{StaticResource PurpleButton}" VerticalAlignment="Center"
                             Margin="0,0,12,0" Click="btn_about_Click"/>
 
