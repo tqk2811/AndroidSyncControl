@@ -1,13 +1,6 @@
 # git-cliff config rieng cho GitHub Release notes (sinh boi CI .github/workflows/release.yml).
-# Khac cliff.toml (CHANGELOG.md local): KHONG header/footer. Dung voi range '<tag>..HEAD'
-# (moi commit ke tu tag M.N.0, gom ca commit merge vao tu branch khac).
-#
-# Template CHI emit '__SHA_<sha>__ <noi dung da format>' cho tung commit (khong danh so,
-# khong phu thuoc thu tu output). release.yml dung sha de dung cau truc notes theo cac
-# BUILD '[release]':
-# - Diem build R = commit first-parent co marker '[release]' (+ HEAD cua run hien tai);
-#   header '- M.N.<zzz>' voi zzz = rev-list --count tag..R (= version artifact, GitVersion dem MOI commit)
-# - Muc con '  + <noi dung>' = moi commit moi trong (R_truoc..R], gom ca commit merge tu branch khac
+# Khac cliff.toml (CHANGELOG.md local): KHONG header/footer. Dung voi range '<tag truoc>..<tag>',
+# nen notes cua moi Release chi gom commit cua ban do.
 
 [changelog]
 header = ""
@@ -18,7 +11,7 @@ header = ""
 body = """
 {% for commit in commits %}\
 {% if commit.group in ["feat", "fix", "perf", "revert", "refactor", "chore"] %}\
-__SHA_{{ commit.id }}__ {% if commit.scope %}({{ commit.group }}) [**{{ commit.scope }}**](__REPO__/commit/{{ commit.id }}){% else %}[({{ commit.group }})](__REPO__/commit/{{ commit.id }}){% endif %} {{ commit.message | upper_first }}{% if commit.breaking %} [**breaking**]{% endif %}
+- {% if commit.scope %}({{ commit.group }}) [**{{ commit.scope }}**](__REPO__/commit/{{ commit.id }}){% else %}[({{ commit.group }})](__REPO__/commit/{{ commit.id }}){% endif %} {{ commit.message | upper_first }}{% if commit.breaking %} [**breaking**]{% endif %}
 {% endif %}\
 {% endfor %}\
 """
@@ -46,10 +39,7 @@ commit_parsers = [
     { message = "^sample", group = "sample" },
     { message = "^chore", group = "chore" },
     { message = ".*", group = "other" },
-    # Danh so/thu tu deu do release.yml quyet (tra cuu theo sha) nen skip khong pha gi;
-    # van loc loai hien thi o body template cho gon 1 cho.
 ]
 filter_commits = false
 tag_pattern = '[vV]?[0-9]+\.[0-9]+\.[0-9]+'
-# Thu tu output khong quan trong (release.yml tra cuu theo sha); oldest cho deterministic.
 sort_commits = "oldest"

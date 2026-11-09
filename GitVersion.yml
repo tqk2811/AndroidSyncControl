@@ -1,6 +1,6 @@
-# GitVersion config -- version pattern MAJOR.MINOR.<commits-since-tag>.
-# Tag full SemVer like '1.0.0' (prefix optional 'v'). master/main keep Major.Minor
-# from the tag (increment: None); patch = CommitsSinceVersionSource (commits since tag).
+# GitVersion config -- the version is the tag vM.N.P (full SemVer is required).
+# increment: None keeps M.N.P from the latest tag; Directory.Build.targets adds -dev.<n> after it.
+# The prefix stays optional because the older tag 1.0.0 has none.
 deployment-mode: ManualDeployment
 tag-prefix: '[vV]?'
 branches:

@@ -1,7 +1,8 @@
 <Project>
 	<!--
 	  Versioning for the app via GitVersion.MsBuild.
-	  Release build => Version = GitVersion Major.Minor.CommitsSinceVersionSource (e.g. 1.0.0).
+	  Release build on a tag vM.N.P => Version = M.N.P.
+	  Release build after that tag  => Version = M.N.P-dev.<commits since the tag>.
 	  Debug build   => GitVersion task disabled (offline/fast), Version = 0.0.0-debug.
 	  GitVersion.MsBuild is always referenced (stable restore graph); only the task is
 	  toggled per configuration.
@@ -34,9 +35,10 @@
 
 	<Target Name="SetVersionFromGitVersion" AfterTargets="GetVersion" Condition="'$(EnableGitVersion)' == 'true' and '$(DisableGitVersionTask)' != 'true'">
 		<PropertyGroup>
-			<Version>$(GitVersion_Major).$(GitVersion_Minor).$(GitVersion_CommitsSinceVersionSource)</Version>
+			<Version>$(GitVersion_MajorMinorPatch)</Version>
+			<Version Condition="'$(GitVersion_CommitsSinceVersionSource)' != '0'">$(GitVersion_MajorMinorPatch)-dev.$(GitVersion_CommitsSinceVersionSource)</Version>
 			<AssemblyVersion>$(GitVersion_Major).$(GitVersion_Minor).0.0</AssemblyVersion>
-			<FileVersion>$(GitVersion_Major).$(GitVersion_Minor).$(GitVersion_CommitsSinceVersionSource).0</FileVersion>
+			<FileVersion>$(GitVersion_MajorMinorPatch).$(GitVersion_CommitsSinceVersionSource)</FileVersion>
 			<InformationalVersion>$(Version)</InformationalVersion>
 		</PropertyGroup>
 	</Target>

@@ -19,28 +19,6 @@ if (-not (Test-Path $proj)) { throw "Project not found: $proj" }
 $tfm = @($csproj.Project.PropertyGroup.TargetFramework) | Where-Object { $_ } | Select-Object -First 1
 if ([string]::IsNullOrWhiteSpace($tfm)) { throw "TargetFramework not found in $proj" }
 
-# Version via GitVersion (M.N.<commits-since-tag>). Install the tool if missing.
-if (-not (Get-Command dotnet-gitversion -ErrorAction SilentlyContinue)) {
-    dotnet tool install -g GitVersion.Tool | Out-Host
-    $env:PATH = "$env:PATH;$env:USERPROFILE\.dotnet\tools"
-}
-# GitVersion stdout can be preceded by log lines on a fresh runner, and the freshly
-# installed tool may even exit non-zero on its first call. Relax the error preference
-# for the call, capture all output, then slice out the JSON object so parsing is robust.
-$eap = $ErrorActionPreference
-$ErrorActionPreference = 'Continue'
-$gvRaw = (dotnet-gitversion /output json 2>&1 | Out-String)
-$ErrorActionPreference = $eap
-$jsonStart = $gvRaw.IndexOf('{'); $jsonEnd = $gvRaw.LastIndexOf('}')
-if ($jsonStart -lt 0 -or $jsonEnd -le $jsonStart) {
-    Write-Host "GitVersion raw output:`n$gvRaw"
-    throw "dotnet-gitversion produced no JSON output"
-}
-$gv = $gvRaw.Substring($jsonStart, ($jsonEnd - $jsonStart + 1)) | ConvertFrom-Json
-$verMajor = [int]$gv.Major; $verMinor = [int]$gv.Minor; $verBuild = [int]$gv.CommitsSinceVersionSource
-$version = "$verMajor.$verMinor.$verBuild"
-Write-Host "Version: $version   TargetFramework: $tfm"
-
 # Clean previous publish output.
 $publishDir = Join-Path $root 'publish'
 Remove-Item -Recurse -Force $publishDir -ErrorAction SilentlyContinue
@@ -53,6 +31,11 @@ New-Item -ItemType Directory -Force -Path $appDir | Out-Null
 # GitVersion.MsBuild (Directory.Build.targets, Release) stamps the same version into the assembly.
 dotnet publish $proj -c Release -r win-x64 --self-contained true -o $appDir
 if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
+
+# The zip is named after the version stamped into the assembly, so the two cannot differ.
+$version = ([Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $appDir 'AndroidSyncControl.dll')).ProductVersion -split '\+')[0]
+if ([string]::IsNullOrWhiteSpace($version)) { throw "No version found in the published assembly" }
+Write-Host "Version: $version   TargetFramework: $tfm"
 
 # Ship the license notices next to the binaries (MIT requires the notice to travel with every
 # copy; the FFmpeg DLLs are LGPL-2.1 and adb/scrcpy-server are Apache-2.0, whose full texts go
