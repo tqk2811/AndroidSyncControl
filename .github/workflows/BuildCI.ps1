@@ -11,7 +11,7 @@ $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = 'true'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 Set-Location $root
 
-$proj = Join-Path $root 'AndroidSyncControl\AndroidSyncControl.csproj'
+$proj = Join-Path $root 'src\AndroidSyncControl\AndroidSyncControl.csproj'
 if (-not (Test-Path $proj)) { throw "Project not found: $proj" }
 
 # TargetFramework from the csproj -> used in the zip name.
